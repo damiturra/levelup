@@ -1,0 +1,184 @@
+/* Estilos específicos para el catálogo */
+.product-card {
+    background: rgba(14,18,24,.95);
+    border: 1px solid rgba(30,144,255,.25);
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(57,255,20,.45);
+    box-shadow: 0 12px 28px rgba(0,0,0,.5), 0 0 36px rgba(57,255,20,.25);
+}
+
+.product-card .card-img-top {
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 0;
+}
+
+.product-card .card-body {
+    background: linear-gradient(180deg, rgba(14,18,24,.98), rgba(14,18,24,1));
+}
+
+.product-card .card-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    line-height: 1.3;
+}
+
+.product-card .badge {
+    font-size: 0.75rem;
+    padding: 0.5em 0.75em;
+    backdrop-filter: blur(8px);
+}
+
+.product-card .card-text {
+    font-size: 0.875rem;
+    opacity: 0.85;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-card .rating {
+    color: #ffc107;
+    font-size: 0.875rem;
+}
+
+.product-card .btn {
+    font-size: 0.875rem;
+}
+
+/* Filtros */
+.filter-section {
+    background: rgba(14,18,24,.95);
+    border: 1px solid rgba(30,144,255,.25);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+}
+
+.filter-section .form-label {
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.filter-section .form-control,
+.filter-section .form-select,
+.filter-section .form-range {
+    font-size: 0.875rem;
+}
+
+/* Badges y etiquetas */
+.badge.badge-duoc {
+    background: linear-gradient(135deg, rgba(57,255,20,.15), rgba(30,144,255,.15));
+    border: 1px solid rgba(57,255,20,.35);
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    padding: 0.5em 1em;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .product-card .card-img-top {
+        aspect-ratio: 16/9;
+    }
+}
+
+/* --- Catalog aesthetic align with index --- */
+:root{
+  --neon:#00f5ff;
+  --neon-2:#8afcff;
+  --bg-1:#0b0d10;
+  --bg-2:#11151a;
+  --card:#151a21;
+  --text:#e7eef7;
+  --muted:#9aa7b8;
+  --ring: rgba(0,245,255,.35);
+}
+
+/* Body background parity (in case styles.css doesn't set it) */
+body{ background: linear-gradient(180deg,var(--bg-1),var(--bg-2)); color:var(--text); }
+
+.navbar{ backdrop-filter: blur(4px); }
+.brand-orbitron{ letter-spacing:.5px; text-transform: uppercase; }
+
+.text-neon{ color: var(--neon); }
+
+.btn-neon-primary{
+  --bs-btn-color:#081318;
+  --bs-btn-bg:var(--neon);
+  --bs-btn-border-color:var(--neon);
+  --bs-btn-hover-bg:#54f7ff;
+  --bs-btn-hover-border-color:#54f7ff;
+  --bs-btn-focus-shadow-rgb:0,245,255;
+  box-shadow:0 0 0 .1rem rgba(0,245,255,.05), 0 0 1.25rem rgba(0,245,255,.25);
+}
+
+.btn-outline-neon{
+  --bs-btn-color:var(--neon);
+  --bs-btn-border-color:var(--neon);
+  --bs-btn-hover-color:#081318;
+  --bs-btn-hover-bg:var(--neon);
+  --bs-btn-hover-border-color:var(--neon);
+  --bs-btn-focus-shadow-rgb:0,245,255;
+  box-shadow:0 0 0 .1rem rgba(0,245,255,.05);
+}
+
+.card-glow{
+  background: var(--card);
+  border: 1px solid rgba(255,255,255,.06);
+  box-shadow:
+    0 6px 20px rgba(0,0,0,.35),
+    inset 0 0 0 1px rgba(255,255,255,.02);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.card-glow:hover{
+  transform: translateY(-2px);
+  border-color: rgba(0,245,255,.35);
+  box-shadow:
+    0 10px 26px rgba(0,0,0,.45),
+    0 0 18px rgba(0,245,255,.15);
+}
+
+.catalog-grid .card .card-img-top{
+  object-fit: cover;
+  height: 180px;
+  background: #0e1318;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.form-control, .form-select{
+  background-color:#0f141a;
+  border-color:rgba(255,255,255,.12);
+  color:var(--text);
+}
+.form-control:focus, .form-select:focus{
+  border-color:var(--neon);
+  box-shadow:0 0 0 .25rem var(--ring);
+  color:var(--text);
+}
+
+/* Slider */
+.form-range::-webkit-slider-thumb{ background: var(--neon); }
+.form-range::-moz-range-thumb{ background: var(--neon); }
+
+/* Badges & small text */
+.badge{ letter-spacing:.3px; }
+.text-secondary{ color:var(--muted)!important; }
+
+/* Pagination styling for parity */
+.pagination .page-link{
+  background:#0f141a;
+  border-color:rgba(255,255,255,.12);
+  color:var(--text);
+}
+.pagination .page-item.active .page-link{
+  background:var(--neon);
+  border-color:var(--neon);
+  color:#081318;
+}

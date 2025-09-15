@@ -1,0 +1,176 @@
+/**
+ * Módulo de Detalle de Producto - Level Up Gamer
+ * Maneja la visualización y funcionalidad de la página de detalle de producto.
+ */
+
+// Función para formatear precios (usar fmtCLP de app.js si está disponible)
+const formatPrice = (price) => {
+    if (typeof window.fmtCLP === 'function') {
+        return window.fmtCLP(price);
+    }
+    return `$${price.toLocaleString('es-CL')} CLP`;
+};
+
+// Función para obtener la URL correcta de la imagen según el código
+function getImageUrl(code) {
+    const extensions = ['webp', 'jpeg', 'jpg', 'png'];
+    for (let ext of extensions) {
+        if (code === 'JM001' && ext === 'jpeg') return `assets/images/${code}.${ext}`;
+        if (code === 'JM002' && ext === 'jpg') return `assets/images/${code}.${ext}`;
+        if (code === 'CG001' && ext === 'png') return `assets/images/${code}.${ext}`;
+    }
+    return `assets/images/${code}.webp`; // Default to webp
+}
+
+// Obtener el código del producto desde la URL
+const urlParams = new URLSearchParams(window.location.search);
+const productCode = urlParams.get('code');
+const product = window.PRODUCTS ? window.PRODUCTS.find(p => p.code === productCode) : null;
+
+// Renderizar detalles del producto
+function renderProductDetail() {
+    const container = document.getElementById('detalleProducto');
+    if (!container) return;
+
+    if (!product) {
+        container.innerHTML = `
+            <div class="alert alert-danger">
+                <h4>Producto no encontrado</h4>
+                <p>El producto que buscas no existe o fue removido del catálogo.</p>
+                <a href="catalogo.html" class="btn btn-neon-primary mt-3">Volver al catálogo</a>
+            </div>`;
+        return;
+    }
+
+    const imgSrc = getImageUrl(product.code);
+
+    container.innerHTML = `
+        <div class="row">
+            <div class="col-md-5">
+                <img src="${imgSrc}" 
+                     class="img-fluid mb-3 rounded" 
+                     alt="${product.name}"
+                     onerror="this.onerror=null; this.src='assets/images/${product.code}.png'">
+            </div>
+            <div class="col-md-7">
+                <nav aria-label="breadcrumb" class="mb-2">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="catalogo.html" class="text-neon">Catálogo</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">${product.category}</li>
+                    </ol>
+                </nav>
+                <h2 class="brand-orbitron">${product.name}</h2>
+                <p class="text-secondary">${product.desc}</p>
+                <div class="d-flex align-items-baseline gap-2 mb-3">
+                    <span class="fw-bold text-neon fs-4">${formatPrice(product.price)}</span>
+                    <small class="text-${product.stock > 0 ? 'success' : 'danger'}">
+                        ${product.stock > 0 ? `Stock disponible: ${product.stock}` : 'Sin stock'}
+                    </small>
+                </div>
+                <form id="addToCartForm" class="mt-3">
+                    <div class="row g-2">
+                        <div class="col-auto">
+                            <label for="quantity" class="form-label">Cantidad:</label>
+                            <input type="number" 
+                                   id="quantity" 
+                                   min="1" 
+                                   max="${product.stock}" 
+                                   value="1" 
+                                   class="form-control"
+                                   ${product.stock === 0 ? 'disabled' : ''}>
+                        </div>
+                        <div class="col-auto d-flex align-items-end">
+                            <button type="submit" 
+                                    class="btn btn-neon-primary" 
+                                    ${product.stock === 0 ? 'disabled' : ''}>
+                                Agregar al carrito
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <hr class="border-primary-subtle my-4">
+                <h3 class="h5 brand-orbitron mb-3">Detalles del producto</h3>
+                <ul class="list-unstyled text-secondary">
+                    <li><strong>Código:</strong> ${product.code}</li>
+                    <li><strong>Categoría:</strong> ${product.category}</li>
+                    <li><strong>Rating:</strong> ${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5-Math.floor(product.rating))} (${product.rating})</li>
+                </ul>
+            </div>
+        </div>
+    `;
+}
+
+// Función para agregar al carrito
+function addToCart(e) {
+    if (e) e.preventDefault();
+    
+    if (!product) {
+        console.error('No hay producto para agregar al carrito');
+        return;
+    }
+
+    if (product.stock === 0) {
+        console.error('Producto sin stock');
+        return;
+    }
+
+    const quantity = parseInt(document.getElementById('quantity').value);
+    if (isNaN(quantity) || quantity < 1) {
+        console.error('Cantidad inválida');
+        return;
+    }
+
+    // Verificar que no exceda el stock
+    if (quantity > product.stock) {
+        alert(`Solo hay ${product.stock} unidades disponibles`);
+        return;
+    }
+
+    const cartItem = {
+        code: product.code,
+        name: product.name,
+        price: product.price,
+        quantity: quantity,
+        image: getImageUrl(product.code)
+    };
+
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const existingItemIndex = cart.findIndex(item => item.code === product.code);
+
+    if (existingItemIndex >= 0) {
+        // Verificar que la suma no exceda el stock
+        const newQuantity = cart[existingItemIndex].quantity + quantity;
+        if (newQuantity > product.stock) {
+            alert(`Solo hay ${product.stock} unidades disponibles y ya tienes ${cart[existingItemIndex].quantity} en el carrito`);
+            return;
+        }
+        cart[existingItemIndex].quantity = newQuantity;
+    } else {
+        cart.push(cartItem);
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    // Actualizar badge del carrito si existe la función
+    if (typeof updateCartBadge === 'function') {
+        updateCartBadge();
+    }
+
+    // Mostrar toast de confirmación
+    const toast = new bootstrap.Toast(document.getElementById('cartToast'));
+    toast.show();
+}
+
+// Inicialización
+document.addEventListener('DOMContentLoaded', () => {
+    renderProductDetail();
+    
+    // Conectar formulario de agregar al carrito
+    const form = document.getElementById('addToCartForm');
+    if (form) {
+        form.addEventListener('submit', addToCart);
+    }
+    
+    // Exponer funciones necesarias globalmente
+    window.addToCart = addToCart;
+});

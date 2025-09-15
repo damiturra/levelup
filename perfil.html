@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi Perfil · Level‑Up Gamer</title>
+  <meta name="description" content="Gestiona tu perfil, beneficios y preferencias · Level‑Up Gamer">
+  <meta name="theme-color" content="#000000">
+  
+  <!-- Fuentes + Bootstrap -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=O      // Inicializar tooltips de Bootstrap
+      const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      tooltips.forEach(tooltip => new bootstrap.Tooltip(tooltip));@400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Estilos globales -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="icon" href="assets/images/logo-levelup.jpeg" type="image/jpeg">
+  
+  <style>
+    :root { 
+      --bg: #000; 
+      --electric: #1E90FF; 
+      --neon: #39FF14; 
+      --text: #fff; 
+      --text-muted: #a0a0a0;
+      --card: #0e1218; 
+    }
+    
+    /* Reset y base */
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Roboto', system-ui;
+      min-height: 100vh;
+    }
+    
+    /* Contenedor principal */
+    .profile-container {
+      min-height: calc(100vh - 76px - 80px);
+      padding: 2rem 1rem;
+    }
+
+    /* Niveles de usuario */
+    .badge-bronze {
+      background: linear-gradient(135deg, #CD7F32, #A05A2C);
+      color: #fff;
+    }
+
+    .badge-silver {
+      background: linear-gradient(135deg, #C0C0C0, #A8A8A8);
+      color: #000;
+    }
+
+    .badge-gold {
+      background: linear-gradient(135deg, #FFD700, #FFA500);
+      color: #000;
+    }
+
+    .bg-electric {
+      background: var(--electric) !important;
+    }
+
+    /* Tarjeta de perfil */
+    .profile-card {
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(30,144,255,.35);
+      border-radius: 1rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      color: var(--text);
+    }
+    
+    /* Tarjetas de estadísticas */
+    .stats-card {
+      background: rgba(14,18,24,.8);
+      border: 1px solid rgba(30,144,255,.25);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      color: var(--text);
+    }
+    
+    /* Valores y etiquetas */
+    .stats-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--electric);
+      text-shadow: 0 0 10px rgba(30,144,255,.4);
+    }
+    
+    .text-muted {
+      color: var(--text-muted) !important;
+    }
+    
+    /* Formulario y campos */
+    .form-control {
+      background: #0b1118 !important;
+      color: var(--text) !important;
+      border: 1px solid rgba(126,200,255,.65) !important;
+      border-radius: 0.5rem;
+    }
+    
+    .form-control:focus {
+      background: #0e1621 !important;
+      border-color: var(--electric) !important;
+      box-shadow: 0 0 0 .2rem rgba(30,144,255,.35) !important;
+    }
+    
+    .form-label {
+      color: var(--text);
+      font-weight: 500;
+    }
+    
+    /* Botones */
+    .btn-neon {
+      background: linear-gradient(135deg, var(--electric) 0%, #63b8ff 45%, var(--neon) 100%);
+      border: 0;
+      color: #07111c;
+      font-weight: 600;
+      padding: 0.6rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-neon:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(30,144,255,.35);
+    }
+    
+    /* Badges y etiquetas */
+    .badge-level {
+      background: linear-gradient(135deg, var(--electric), var(--neon));
+      color: #000;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      text-shadow: 0 1px 0 rgba(255,255,255,.2);
+    }
+    
+    /* Código de referido */
+    .referral-code {
+      font-family: 'Orbitron', monospace;
+      letter-spacing: 1px;
+      background: #0b1118;
+      border: 1px solid rgba(30,144,255,.4);
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--electric);
+    }
+    
+    .referral-code:hover {
+      border-color: var(--neon);
+      box-shadow: 0 0 12px rgba(57,255,20,.2);
+    }
+    
+    /* Mensajes de estado */
+    .error-message {
+      display: none;
+      color: #ff4444;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    
+    .success-message {
+      display: none;
+      color: #00C851;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    
+    /* Tabla */
+    .table {
+      color: var(--text);
+    }
+    
+    .table th {
+      color: var(--electric);
+      font-weight: 600;
+    }
+    
+    .table td {
+      color: var(--text);
+    }
+    
+    /* Tipografía */
+    .brand-orbitron {
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: .5px;
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <header class="sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-primary-subtle shadow-sm" data-bs-theme="dark">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+          <img src="assets/images/logo-levelup.jpeg" alt="Logo" width="30" height="30" class="rounded">
+          <span class="brand-orbitron">Level-Up Gamer</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="catalogo.html">Catálogo</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="blog.html">Blog</a>
+            </li>
+            <li class="nav-item" id="navProfileLink">
+              <a class="nav-link active" href="perfil.html">Mi Perfil</a>
+            </li>
+          </ul>
+          <div class="d-flex align-items-center gap-3">
+            <span id="navDuocBadge" class="badge text-bg-success d-none">DUOC 20% OFF</span>
+            <div id="navAuthButtons" class="d-none">
+              <a class="btn btn-sm btn-outline-light" href="login.html">Iniciar Sesión</a>
+            </div>
+            <button id="navLogoutBtn" class="btn btn-sm btn-outline-danger">Cerrar sesión</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN -->
+  <main class="profile-container">
+    <div class="profile-card">
+      <!-- Header -->
+      <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center gap-3">
+          <h1 class="h3 brand-orbitron mb-0">Mi Perfil</h1>
+          <span id="levelBadge" class="badge badge-level">NIVEL BRONZE</span>
+        </div>
+        <span id="duocBadge" class="badge text-bg-success d-none">DUOC 20% OFF</span>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-3">
+          <div class="stats-card">
+            <h6 class="text-muted mb-2">Puntos acumulados</h6>
+            <div class="stats-value" id="pointsValue">0</div>
+            <div class="progress bg-dark mt-2" style="height: 6px;">
+              <div class="progress-bar bg-electric" id="levelProgress" role="progressbar" style="width: 0%;"
+                   aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <small class="text-muted" id="nextLevelPoints"></small>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stats-card">
+            <h6 class="text-muted mb-2">Compras realizadas</h6>
+            <div class="stats-value" id="purchasesValue">0</div>
+            <small class="text-muted">Total histórico</small>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stats-card">
+            <h6 class="text-muted mb-2">Total ahorrado</h6>
+            <div class="stats-value text-success" id="savingsValue">$0</div>
+            <small class="text-muted">En descuentos y ofertas</small>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stats-card">
+            <h6 class="text-muted mb-2">Código de referido</h6>
+            <div class="referral-code" id="refCode" data-bs-toggle="tooltip" title="Click para copiar">
+              CARGANDO...
+            </div>
+            <small class="text-muted">Comparte y gana puntos</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Beneficios del nivel -->
+      <div class="glass p-3 mb-4">
+        <h4 class="h5 brand-orbitron mb-3">Beneficios de tu nivel</h4>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-trophy-fill me-2 text-warning"></i>
+              <h6 class="mb-0">NIVEL BRONZE</h6>
+            </div>
+            <ul class="list-unstyled text-muted small">
+              <li><i class="bi bi-check2 me-1"></i>Acceso a ofertas exclusivas</li>
+              <li><i class="bi bi-check2 me-1"></i>Envío gratis en pedidos +$100.000</li>
+              <li><i class="bi bi-check2 me-1"></i>Puntos por cada compra</li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-trophy-fill me-2 text-secondary"></i>
+              <h6 class="mb-0">NIVEL SILVER</h6>
+            </div>
+            <ul class="list-unstyled text-muted small">
+              <li><i class="bi bi-check2 me-1"></i>5% descuento permanente</li>
+              <li><i class="bi bi-check2 me-1"></i>Envío gratis en pedidos +$50.000</li>
+              <li><i class="bi bi-check2 me-1"></i>Acceso prioritario a preventas</li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-trophy-fill me-2 text-warning"></i>
+              <h6 class="mb-0">NIVEL GOLD</h6>
+            </div>
+            <ul class="list-unstyled text-muted small">
+              <li><i class="bi bi-check2 me-1"></i>10% descuento permanente</li>
+              <li><i class="bi bi-check2 me-1"></i>Envío gratis sin mínimo</li>
+              <li><i class="bi bi-check2 me-1"></i>Soporte prioritario 24/7</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Historial de Compras -->
+      <div class="mb-4">
+        <h3 class="h5 brand-orbitron mb-3">Últimas Compras</h3>
+        <div class="table-responsive">
+          <table class="table table-dark table-hover">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Orden</th>
+                <th>Productos</th>
+                <th class="text-end">Total</th>
+              </tr>
+            </thead>
+            <tbody id="orderHistory">
+              <!-- Se llena con JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <form id="profileForm" class="needs-validation" novalidate>
+        <div class="row g-4">
+          <!-- Datos personales -->
+          <div class="col-12">
+            <h4 class="h5 brand-orbitron mb-3">Datos Personales</h4>
+          </div>
+          
+          <div class="col-md-6">
+            <label class="form-label" for="name">Nombre completo <span class="text-danger">*</span></label>
+            <div class="input-group has-validation">
+              <input class="form-control" id="name" name="name" required pattern="[A-Za-zÁáÉéÍíÓóÚúÑñ\s]{3,50}" 
+                     placeholder="Ingresa tu nombre completo" data-bs-toggle="tooltip" 
+                     title="Tu nombre debe tener entre 3 y 50 caracteres">
+              <div class="invalid-feedback">
+                El nombre debe tener al menos 3 caracteres y solo puede contener letras
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <label class="form-label" for="birthdate">Fecha de nacimiento <span class="text-danger">*</span></label>
+            <input type="date" class="form-control" id="birthdate" name="birthdate" required
+                   data-bs-toggle="tooltip" title="Debes ser mayor de 18 años">
+            <div class="invalid-feedback">
+              Debes ser mayor de 18 años para usar la plataforma
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <label class="form-label" for="phone">Teléfono <span class="text-danger">*</span></label>
+            <div class="input-group has-validation">
+              <span class="input-group-text">+56</span>
+              <input type="tel" class="form-control" id="phone" name="phone" required 
+                     pattern="9[0-9]{8}" placeholder="912345678"
+                     data-bs-toggle="tooltip" title="Ingresa tu número sin +56">
+              <div class="invalid-feedback">
+                Ingresa un número válido (9 dígitos comenzando con 9)
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="email">Correo electrónico</label>
+            <input class="form-control bg-darker" type="email" id="email" readonly>
+            <div class="form-text text-muted">
+              El correo no se puede cambiar
+            </div>
+          </div>
+
+          <!-- Dirección y preferencias -->
+          <div class="col-12 mt-4">
+            <h4 class="h5 brand-orbitron mb-3">Dirección y Preferencias</h4>
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label" for="address">Dirección de entrega <span class="text-danger">*</span></label>
+            <textarea class="form-control" id="address" name="address" required rows="2"
+                      placeholder="Ej: Calle Example 123, Depto 456, Comuna"
+                      data-bs-toggle="tooltip" title="Ingresa tu dirección completa para la entrega"></textarea>
+            <div class="invalid-feedback">
+              Ingresa una dirección válida para la entrega
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label" for="preferences">Preferencias de juego</label>
+            <textarea class="form-control" id="preferences" name="preferences" rows="3"
+                      placeholder="Ej: PC Gaming, PS5, Nintendo Switch, Juegos de mesa..."
+                      data-bs-toggle="tooltip" title="Estas preferencias nos ayudan a mostrarte productos relevantes"></textarea>
+            <div class="form-text text-muted">
+              Cuéntanos tus plataformas y géneros favoritos
+            </div>
+          </div>
+        </div>
+
+        <!-- Mensajes de estado -->
+        <div class="alert alert-danger d-none mt-3" id="profileError" role="alert"></div>
+        <div class="alert alert-success d-none mt-3" id="profileSuccess" role="alert"></div>
+
+        <!-- Botones de acción -->
+        <div class="d-flex flex-wrap gap-3 mt-4">
+          <button type="submit" class="btn btn-neon px-4" id="btnSave">
+            <i class="bi bi-check2-circle me-1"></i> Guardar cambios
+          </button>
+          <button type="button" class="btn btn-outline-light" id="btnReset">
+            <i class="bi bi-arrow-counterclockwise me-1"></i> Restablecer
+          </button>
+          <button type="button" class="btn btn-outline-danger ms-auto" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            <i class="bi bi-trash3 me-1"></i> Eliminar cuenta
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Modal Eliminar Cuenta -->
+  <div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header border-secondary">
+          <h5 class="modal-title">Eliminar cuenta</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p>¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.</p>
+          <p class="text-danger">Se perderán todos tus datos, puntos y beneficios acumulados.</p>
+        </div>
+        <div class="modal-footer border-secondary">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="btnConfirmDelete">Eliminar cuenta</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Scripts -->
+  <script src="assets/js/session.js"></script>
+  <script src="assets/js/profile.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/order-history.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Verificar sesión activa
+      const currentUser = getCurrentUser();
+      if (!currentUser) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Referencias DOM
+      const form = document.getElementById('profileForm');
+      
+      // Cargar datos del usuario
+      document.getElementById('email').value = currentUser.email || '';
+      document.getElementById('name').value = currentUser.name || '';
+      document.getElementById('birthdate').value = currentUser.birthdate || '';
+      document.getElementById('phone').value = currentUser.phone || '';
+      document.getElementById('address').value = currentUser.address || '';
+      document.getElementById('preferences').value = currentUser.preferences || '';
+      
+      // Mostrar badge DUOC si aplica
+      if (currentUser.email.endsWith('@duoc.cl')) {
+        document.getElementById('duocBadge').classList.remove('d-none');
+      }
+      
+      // Cargar historial de compras
+      const orders = getLocalStorage(APP_STORAGE_KEYS.ORDERS, [])
+        .filter(order => order.email === currentUser.email)
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      const orderHistory = document.getElementById('orderHistory');
+      if (orders.length === 0) {
+        orderHistory.innerHTML = `
+          <tr>
+            <td colspan="4" class="text-center text-muted">
+              No hay compras realizadas aún
+            </td>
+          </tr>
+        `;
+      } else {
+        orderHistory.innerHTML = orders.slice(0, 5).map(order => `
+          <tr>
+            <td>${new Date(order.date).toLocaleDateString()}</td>
+            <td>${order.orderId}</td>
+            <td>${order.items.length} productos</td>
+            <td class="text-end">${fmtCLP(order.total)}</td>
+          </tr>
+        `).join('');
+      }
+
+      // Inicializar validación del formulario
+      form.classList.add('needs-validation');
+
+      // Manejar envío del formulario
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Validar todos los campos
+        const isValid = Array.from(form.elements)
+          .filter(el => el.tagName !== 'BUTTON')
+          .every(field => validateField(field));
+
+        form.classList.add('was-validated');
+
+        if (!isValid) {
+          showError('Por favor corrige los errores en el formulario');
+          return;
+        }
+
+        const updates = {
+          name: document.getElementById('name').value.trim(),
+          birthdate: document.getElementById('birthdate').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          address: document.getElementById('address').value.trim(),
+          preferences: document.getElementById('preferences').value.trim(),
+          isAdult: true, // Ya validado en validateBirthdate
+          updatedAt: new Date().toISOString()
+        };
+
+        try {
+          if (updateUser(currentUser.email, updates)) {
+            showSuccess('¡Perfil actualizado correctamente!');
+            // Actualizar datos en sesión
+            const updatedUser = { ...currentUser, ...updates };
+            setCurrentUser(updatedUser);
+            // Recargar para mostrar cambios
+            setTimeout(() => window.location.reload(), 1000);
+          } else {
+            showError('No se pudo actualizar el perfil');
+          }
+        } catch (err) {
+          showError(err.message || 'Error al actualizar el perfil');
+        }
+      });
+
+      // Manejar reset del formulario
+      document.getElementById('btnReset').addEventListener('click', function() {
+        form.reset();
+        form.classList.remove('was-validated');
+        Array.from(form.elements).forEach(field => {
+          field.classList.remove('is-valid', 'is-invalid');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+</body>
+</html>

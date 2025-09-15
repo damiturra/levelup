@@ -1,0 +1,235 @@
+/*==================================
+  Level Up Gamer - Estilos Globales
+  
+  Contenido:
+  1. Variables y Configuración
+  2. Reset y Base
+  3. Componentes
+  4. Utilidades
+  5. Animaciones
+===================================*/
+
+/*----------------------------------
+  1. Variables y Configuración
+----------------------------------*/
+:root {
+  /* Colores principales */
+  --bg: #000;
+  --electric: #1E90FF;
+  --neon: #39FF14;
+  --text: #fff;
+  --text-muted: #a0a0a0;
+  
+  /* Backgrounds y cards */
+  --card: #0e1218;
+  --card-gradient: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  
+  /* Bordes y sombras */
+  --border-electric: rgba(30,144,255,.35);
+  --shadow-hover: 0 5px 15px rgba(30,144,255,.2);
+  
+  /* Transiciones */
+  --transition-smooth: .2s ease;
+}
+
+/*----------------------------------
+  2. Reset y Base
+----------------------------------*/
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Roboto', system-ui;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.brand-orbitron {
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+/*----------------------------------
+  3. Componentes - Cards
+----------------------------------*/
+.card {
+  background: var(--card-gradient);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-electric);
+  transition: transform var(--transition-smooth),
+              box-shadow var(--transition-smooth);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+}
+
+.card-img-top {
+  aspect-ratio: 1;
+  object-fit: contain;
+  background: var(--card);
+  border-bottom: 1px solid var(--border-electric);
+}
+
+/*----------------------------------
+  3. Componentes - Badges y Estados
+----------------------------------*/
+.badge {
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.badge-level {
+  background: linear-gradient(135deg, var(--electric), var(--neon));
+  color: #000;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+}
+
+/*----------------------------------
+  3. Componentes - Botones
+----------------------------------*/
+.btn-neon-primary {
+  border: 1px solid rgba(30,144,255,.6);
+  color: #001;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--electric), var(--neon));
+  box-shadow: 0 0 12px rgba(30,144,255,.45), 
+             0 0 18px rgba(57,255,20,.3);
+  transition: all var(--transition-smooth);
+}
+
+.btn-neon-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 18px rgba(30,144,255,.6), 
+             0 0 24px rgba(57,255,20,.4);
+}
+
+.btn-outline-neon {
+  color: var(--text);
+  border: 1px solid rgba(57,255,20,.6);
+  background: transparent;
+  box-shadow: 0 0 10px rgba(57,255,20,.15) inset;
+  transition: all var(--transition-smooth);
+}
+
+.btn-outline-neon:hover:not(.disabled) {
+  color: #000;
+  background: var(--neon);
+  border-color: var(--neon);
+  transform: translateY(-1px);
+}
+
+/*----------------------------------
+  3. Componentes - Formularios
+----------------------------------*/
+.form-control {
+  background: var(--card) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border-electric) !important;
+  transition: all var(--transition-smooth);
+}
+
+.form-control:focus {
+  background: #0e1621 !important;
+  border-color: var(--electric) !important;
+  box-shadow: 0 0 0 .2rem rgba(30,144,255,.35) !important;
+}
+
+/*----------------------------------
+  3. Componentes - Rating y Paginación
+----------------------------------*/
+.rating {
+  color: var(--neon);
+  letter-spacing: 1px;
+}
+
+.page-link {
+  background: transparent;
+  border-color: var(--border-electric);
+  color: var(--text);
+  transition: all var(--transition-smooth);
+}
+
+.page-link:hover {
+  background: rgba(30,144,255,.15);
+  border-color: var(--electric);
+  color: var(--electric);
+}
+
+.page-item.active .page-link {
+  background: var(--electric);
+  border-color: var(--electric);
+  color: #000;
+}
+
+/*----------------------------------
+  3. Componentes - Notificaciones
+----------------------------------*/
+.toast {
+  background: rgba(14,18,24,.95) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-electric) !important;
+  color: var(--text);
+}
+
+/*----------------------------------
+  4. Utilidades
+----------------------------------*/
+.text-electric { color: var(--electric) !important; }
+.text-neon { color: var(--neon) !important; }
+.border-electric { border-color: var(--border-electric) !important; }
+
+/*----------------------------------
+  3. Componentes - Product Card
+----------------------------------*/
+.product-card {
+  overflow: hidden;
+}
+
+.product-card .card-img-top {
+  transition: transform .3s ease;
+}
+
+.product-card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+.product-card .badge {
+  font-size: 0.8rem;
+}
+
+.product-card .btn-dark {
+  backdrop-filter: blur(5px);
+  background: rgba(0,0,0,.7);
+}
+
+/* Stock indicator */
+.stock-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.stock-available {
+  background: var(--neon);
+  box-shadow: 0 0 8px var(--neon);
+}
+
+.stock-unavailable {
+  background: #dc3545;
+  box-shadow: 0 0 8px #dc3545;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card-img-top {
+    aspect-ratio: 16/9;
+  }
+  
+  .filters-offcanvas {
+    width: 300px !important;
+  }
+}

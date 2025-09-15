@@ -1,0 +1,391 @@
+/**
+ * Módulo de Detalle de Producto - Level Up Gamer
+ * Maneja la visualización y funcionalidad de la página de detalle de producto.
+ * @module product
+ */
+
+// product.js - Detalle de producto Level-Up Gamer
+// products.js define window.PRODUCTS
+
+function formatPrice(price) {
+  return `$${price.toLocaleString('es-CL')} CLP`;
+}
+
+// Obtener el código del producto desde la URL
+const urlParams = new URLSearchParams(window.location.search);
+const productCode = urlParams.get('code');
+const product = window.PRODUCTS.find(p => p.code === productCode);
+
+// Renderizar detalles del producto
+function renderProductDetail() {
+  const container = document.getElementById('detalleProducto');
+  if (!product) {
+    container.innerHTML = `
+      <div class="alert alert-danger">
+        <h4>Producto no encontrado</h4>
+        <p>El producto que buscas no existe o fue removido del catálogo.</p>
+        <a href="catalogo.html" class="btn btn-neon-primary mt-3">Volver al catálogo</a>
+      </div>`;
+    return;
+  }
+
+  // Función para determinar la URL de la imagen correcta
+  function getImageUrl(code) {
+    const extensions = ['webp', 'jpeg', 'jpg', 'png'];
+    for (let ext of extensions) {
+      if (code === 'JM001' && ext === 'jpeg') return `assets/images/${code}.${ext}`;
+      if (code === 'JM002' && ext === 'jpg') return `assets/images/${code}.${ext}`;
+      if (code === 'CG001' && ext === 'png') return `assets/images/${code}.${ext}`;
+    }
+    return `assets/images/${code}.webp`; // Default to webp
+  }
+
+  const imgSrc = getImageUrl(product.code);
+
+  container.innerHTML = `
+    <div class="row">
+      <div class="col-md-5">
+        <img src="${imgSrc}" 
+             class="img-fluid mb-3 rounded" 
+             alt="${product.name}"
+             onerror="this.onerror=null; this.src='assets/images/${product.code}.png'">
+      </div>
+      <div class="col-md-7">
+        <nav aria-label="breadcrumb" class="mb-2">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="catalogo.html" class="text-neon">Catálogo</a></li>
+            <li class="breadcrumb-item active" aria-current="page">${product.category}</li>
+          </ol>
+        </nav>
+        <h2 class="brand-orbitron">${product.name}</h2>
+        <p class="text-secondary">${product.desc}</p>
+        <div class="d-flex align-items-baseline gap-2 mb-3">
+          <span class="fw-bold text-neon fs-4">${formatPrice(product.price)}</span>
+          <small class="text-${product.stock > 0 ? 'success' : 'danger'}">
+            ${product.stock > 0 ? `Stock disponible: ${product.stock}` : 'Sin stock'}
+          </small>
+        </div>
+        <form id="addToCartForm" class="mt-3">
+          <div class="row g-2">
+            <div class="col-auto">
+              <label for="quantity" class="form-label">Cantidad:</label>
+              <input type="number" 
+                     id="quantity" 
+                     min="1" 
+                     max="${product.stock}" 
+                     value="1" 
+                     class="form-control"
+                     ${product.stock === 0 ? 'disabled' : ''}>
+            </div>
+            <div class="col-auto d-flex align-items-end">
+              <button type="submit" 
+                      class="btn btn-neon-primary" 
+                      ${product.stock === 0 ? 'disabled' : ''}>
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </form>
+        <hr class="border-primary-subtle my-4">
+        <h3 class="h5 brand-orbitron mb-3">Detalles del producto</h3>
+        <ul class="list-unstyled text-secondary">
+          <li><strong>Código:</strong> ${product.code}</li>
+          <li><strong>Categoría:</strong> ${product.category}</li>
+          <li><strong>Rating:</strong> ${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5-Math.floor(product.rating))} (${product.rating})</li>
+        </ul>
+      </div>
+    </div>
+  `;
+}
+
+function addToCart() {
+  if (!product) return;
+  const quantity = parseInt(document.getElementById('quantity').value);
+  const cartItem = {
+    code: product.code,
+    name: product.name,
+    price: product.price,
+    quantity: quantity
+  };
+  let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const existingProductIndex = cart.findIndex(item => item.code === product.code);
+  if (existingProductIndex >= 0) {
+    cart[existingProductIndex].quantity += quantity;
+  } else {
+    cart.push(cartItem);
+  }
+  localStorage.setItem('cart', JSON.stringify(cart));
+  
+  // Mostrar toast en lugar de alert
+  const toast = new bootstrap.Toast(document.getElementById('cartToast'));
+  toast.show();
+}
+
+function addToWishlist() {
+  if (!product) return;
+  
+  let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+  const exists = wishlist.some(item => item.code === product.code);
+
+  if (!exists) {
+    wishlist.push({
+      code: product.code,
+      name: product.name,
+      price: product.price
+    });
+    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    
+    // Mostrar toast
+    const toast = new bootstrap.Toast(document.getElementById('wishlistToast'));
+    toast.show();
+  }
+}
+
+function toggleProductWishlist(productId) {
+  const wishlistProduct = PRODUCTS.find(p => p.id === productId);
+  if (!wishlistProduct) return;
+
+  let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+  const exists = wishlist.some(item => item.id === product.id);
+
+  if (!exists) {
+    wishlist.push(product);
+    icon.classList.remove('bi-heart');
+    icon.classList.add('bi-heart-fill');
+    icon.style.color = '#dc3545';
+    const toast = new bootstrap.Toast(document.getElementById('wishlistToast'));
+    toast.show();
+  } else {
+    wishlist = wishlist.filter(item => item.id !== product.id);
+    icon.classList.remove('bi-heart-fill');
+    icon.classList.add('bi-heart');
+    icon.style.color = '';
+  }
+
+  localStorage.setItem('wishlist', JSON.stringify(wishlist));
+}
+
+// Gestión de reseñas
+function submitReview() {
+  const form = document.getElementById('reviewForm');
+  const rating = form.querySelector('input[name="rating"]:checked')?.value;
+  const title = form.querySelector('input[type="text"]').value;
+  const comment = form.querySelector('textarea').value;
+
+  if (!rating || !title || !comment) {
+    alert('Por favor completa todos los campos');
+    return;
+  }
+
+  const review = {
+    id: Date.now(),
+    productId: product.id,
+    rating: parseInt(rating),
+    title,
+    comment,
+    date: new Date().toISOString(),
+    user: 'Usuario' // En una implementación real, esto vendría del sistema de autenticación
+  };
+
+  // Guardar reseña
+  let reviews = JSON.parse(localStorage.getItem('reviews') || '[]');
+  reviews.push(review);
+  localStorage.setItem('reviews', JSON.stringify(reviews));
+
+  // Cerrar modal y mostrar notificación
+  const modal = bootstrap.Modal.getInstance(document.getElementById('reviewModal'));
+  modal.hide();
+  
+  const toast = new bootstrap.Toast(document.getElementById('reviewToast'));
+  toast.show();
+
+  // Actualizar lista de reseñas
+  loadReviews();
+}
+
+function loadReviews() {
+  if (!product) return;
+  let reviews = JSON.parse(localStorage.getItem('reviews') || '[]');
+  reviews = reviews.filter(review => review.productId === product.id);
+  const container = document.getElementById('reviewsContainer');
+  
+  if (reviews.length === 0) {
+    container.innerHTML = '<div class="col-12"><p class="text-center text-muted">No hay reseñas todavía. ¡Sé el primero en opinar!</p></div>';
+    return;
+  }
+
+  // Ordenar por fecha descendente
+  reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  container.innerHTML = reviews.map(review => `
+    <div class="col-md-6">
+      <div class="glass p-3 review-card h-100">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div>
+            <div class="stars">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
+            <h5 class="mb-1">${review.title}</h5>
+          </div>
+          <small class="text-muted">${new Date(review.date).toLocaleDateString()}</small>
+        </div>
+        <p class="mb-2">${review.comment}</p>
+        <small class="text-muted">Por ${review.user}</small>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Compartir producto
+function shareProduct() {
+  const url = window.location.href;
+  navigator.clipboard.writeText(url).then(() => {
+    const toast = new bootstrap.Toast(document.getElementById('shareToast'));
+    toast.show();
+  });
+}
+
+// Exponer funciones globalmente
+window.addToCart = addToCart;
+window.addToWishlist = addToWishlist;
+window.shareProduct = shareProduct;
+window.submitReview = submitReview;
+
+// Inicialización
+document.addEventListener('DOMContentLoaded', () => {
+  if (!product) {
+    document.querySelector('main').innerHTML = `
+      <div class="container py-5 text-center">
+        <h1 class="brand-orbitron">Producto no encontrado</h1>
+        <p>El producto que buscas no existe.</p>
+        <a href="catalogo.html" class="btn btn-neon-primary">Volver al catálogo</a>
+      </div>
+    `;
+    return;
+  }
+
+  // Actualizar título de la página
+  document.title = `${product.name} - Level Up Gamer`;
+
+  // Actualizar imagen principal
+  const mainImage = document.getElementById('mainImage');
+  if (mainImage) {
+    mainImage.src = product.image;
+    mainImage.alt = product.name;
+  }
+
+  // Actualizar título y descripción
+  document.querySelector('h1').textContent = product.name;
+  document.querySelector('p.mb-4').textContent = product.description;
+
+  // Actualizar precio
+  const priceElement = document.querySelector('.price-line span.fs-3');
+  if (priceElement) {
+    priceElement.textContent = formatPrice(product.price);
+  }
+
+  // Cargar reseñas existentes
+  loadReviews();
+
+  // Actualizar estado del stock
+  const stockStatus = document.querySelector('.stock-status');
+  if (stockStatus) {
+    if (product.stock > 10) {
+      stockStatus.innerHTML = '<i class="bi bi-circle-fill"></i> En stock';
+      stockStatus.className = 'stock-status text-success';
+    } else if (product.stock > 0) {
+      stockStatus.innerHTML = `<i class="bi bi-circle-fill"></i> Últimas ${product.stock} unidades`;
+      stockStatus.className = 'stock-status text-warning';
+    } else {
+      stockStatus.innerHTML = '<i class="bi bi-circle-fill"></i> Sin stock';
+      stockStatus.className = 'stock-status text-danger';
+    }
+  }
+
+  // Actualizar botones según stock
+  const addToCartBtn = document.querySelector('button[onclick="addToCart()"]');
+  if (addToCartBtn && product.stock === 0) {
+    addToCartBtn.disabled = true;
+    addToCartBtn.classList.add('disabled');
+  }
+
+  // Actualizar rating
+  const ratingStars = document.querySelector('.stars');
+  if (ratingStars) {
+    ratingStars.innerHTML = '★'.repeat(Math.floor(product.rating)) + '☆'.repeat(5-Math.floor(product.rating));
+  }
+
+  // Actualizar especificaciones técnicas
+  const specsContainer = document.querySelector('.specs');
+  if (specsContainer) {
+    const specsList = Object.entries(product.specs)
+      .map(([key, value]) => `
+        <li>
+          <i class="bi bi-check2-circle text-success me-2"></i>
+          ${key.charAt(0).toUpperCase() + key.slice(1)}: ${value}
+        </li>
+      `).join('');
+    
+    specsContainer.innerHTML = specsList;
+  }
+
+  // Verificar descuento DUOC
+  const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+  const isDuocUser = user && user.email.endsWith('@duocuc.cl');
+  
+  if (isDuocUser) {
+    const priceDiv = document.querySelector('.price-line');
+    const discountedPrice = product.price * 0.8;
+    priceDiv.innerHTML = `
+      <span class="base fs-5">${formatPrice(product.price)}</span>
+      <span class="fs-3">${formatPrice(discountedPrice)}</span>
+    `;
+    
+    const badgesContainer = priceDiv.nextElementSibling;
+    if (badgesContainer) {
+      badgesContainer.innerHTML = `
+        <span class="badge badge-duoc me-2">20% OFF DUOC</span>
+        ${product.stock > 10 ? '<span class="badge badge-duoc me-2">Envío gratis</span>' : ''}
+        ${product.stock <= 5 && product.stock > 0 ? '<span class="badge badge-duoc">¡Últimas unidades!</span>' : ''}
+      `;
+    }
+  }
+
+  // Cargar productos relacionados
+  const relatedContainer = document.querySelector('#relatedProducts .row');
+  if (relatedContainer) {
+    const related = PRODUCTS.filter(p => 
+      p.category === product.category && p.id !== product.id
+    ).slice(0, 4);
+
+    relatedContainer.innerHTML = related.map(p => `
+      <div class="col-6 col-md-3">
+        <div class="card product-card h-100 glass">
+          <div class="position-relative overflow-hidden">
+            <img src="${p.image}" class="card-img-top" alt="${p.name}">
+            <div class="position-absolute top-0 start-0 m-2">
+              <span class="badge bg-primary">${p.category}</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">${p.name}</h5>
+            <div class="stars mb-2">
+              ${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              ${isDuocUser ? `
+                <div class="price-line">
+                  <span class="base">${formatPrice(p.price)}</span>
+                  <span class="fs-5">${formatPrice(p.price * 0.8)}</span>
+                </div>
+              ` : `
+                <span class="fs-5">${formatPrice(p.price)}</span>
+              `}
+              <a href="product.html?id=${p.id}" class="btn btn-sm btn-neon-primary">
+                Ver detalles
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+});

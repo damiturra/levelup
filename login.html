@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar Sesión · Level‑Up Gamer</title>
+  <meta name="description" content="Inicia sesión para acceder a tu cuenta · Level‑Up Gamer">
+  <meta name="theme-color" content="#000000">
+  
+  <!-- Fuentes + Bootstrap -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Estilos globales -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="icon" href="assets/images/logo-levelup.jpeg" type="image/jpeg">
+
+  <style>
+    :root { 
+      --bg: #000; 
+      --electric: #1E90FF; 
+      --neon: #39FF14; 
+      --text: #fff; 
+      --card: #0e1218; 
+    }
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Roboto', system-ui;
+      min-height: 100vh;
+    }
+    .brand-orbitron {
+      font-family: 'Orbitron', sans-serif;
+    }
+    .login-container {
+      min-height: calc(100vh - 76px - 80px);
+      display: grid;
+      place-items: center;
+      padding: 2rem 1rem;
+    }
+    .login-card {
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(30,144,255,.35);
+      border-radius: 1rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 420px;
+    }
+    .form-control {
+      background: #0b1118 !important;
+      color: #fff !important;
+      border: 1px solid rgba(126,200,255,.65) !important;
+      border-radius: 0.5rem;
+    }
+    .form-control:focus {
+      background: #0e1621 !important;
+      border-color: var(--electric) !important;
+      box-shadow: 0 0 0 .2rem rgba(30,144,255,.35) !important;
+    }
+    .btn-neon {
+      background: linear-gradient(135deg, var(--electric) 0%, #63b8ff 45%, var(--neon) 100%);
+      border: 0;
+      color: #07111c;
+      font-weight: 600;
+      padding: 0.6rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    .btn-neon:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(30,144,255,.35);
+    }
+    .error-message {
+      display: none;
+      color: #ff4444;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    .success-message {
+      display: none;
+      color: #00C851;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <header class="sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-primary-subtle shadow-sm" data-bs-theme="dark">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+          <img src="assets/images/logo-levelup.jpeg" alt="Logo" width="30" height="30" class="rounded">
+          <span class="brand-orbitron">Level-Up Gamer</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="catalogo.html">Catálogo</a>
+            </li>
+            <li class="nav-item" id="navProfileLink" style="display: none">
+              <a class="nav-link" href="perfil.html">Mi Perfil</a>
+            </li>
+          </ul>
+          <div class="d-flex align-items-center gap-3">
+            <span id="navDuocBadge" class="badge text-bg-success d-none">DUOC 20% OFF</span>
+            <div id="navAuthButtons">
+              <a class="btn btn-sm btn-outline-light" href="registro.html">Registrarse</a>
+            </div>
+            <button id="navLogoutBtn" class="btn btn-sm btn-outline-danger d-none">Cerrar sesión</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN -->
+  <main class="login-container">
+    <div class="login-card">
+      <h1 class="h3 text-center mb-4 brand-orbitron">Iniciar Sesión</h1>
+      
+      <form id="loginForm" class="needs-validation" novalidate>
+        <div class="mb-3">
+          <label for="email" class="form-label">Correo electrónico</label>
+          <input type="email" class="form-control" id="email" required
+                 placeholder="tucorreo@ejemplo.com">
+          <div class="invalid-feedback">
+            Ingresa un correo válido
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input type="password" class="form-control" id="password" required
+                 minlength="4" placeholder="Tu contraseña">
+          <div class="invalid-feedback">
+            La contraseña debe tener al menos 4 caracteres
+          </div>
+        </div>
+
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="remember">
+          <label class="form-check-label" for="remember">Recordarme</label>
+        </div>
+
+        <div id="loginError" class="error-message text-center mb-3"></div>
+        <div id="loginSuccess" class="success-message text-center mb-3"></div>
+
+        <button type="submit" class="btn btn-neon w-100 mb-3">
+          Ingresar
+        </button>
+
+        <div class="text-center">
+          <p class="mb-2">¿No tienes cuenta? 
+            <a href="registro.html" class="text-info">Regístrate aquí</a>
+          </p>
+          <a href="#" class="text-muted small" data-bs-toggle="modal" data-bs-target="#forgotModal">
+            ¿Olvidaste tu contraseña?
+          </a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Modal Recuperar Contraseña -->
+  <div class="modal fade" id="forgotModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header border-secondary">
+          <h5 class="modal-title">Recuperar contraseña</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p>Ingresa tu correo electrónico y te enviaremos las instrucciones para recuperar tu contraseña.</p>
+          <input type="email" class="form-control" id="recoveryEmail" placeholder="tucorreo@ejemplo.com">
+        </div>
+        <div class="modal-footer border-secondary">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="alert('Se ha enviado un correo con las instrucciones')">Enviar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/session.js"></script>
+  <script src="assets/js/app.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const loginForm = document.getElementById('loginForm');
+      const errorDiv = document.getElementById('loginError');
+      const successDiv = document.getElementById('loginSuccess');
+
+      // Si hay usuario en sesión, redirigir al index
+      const currentUser = getCurrentUser();
+      if (currentUser) {
+        window.location.href = 'index.html';
+      }
+
+      loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Reset mensajes
+        errorDiv.style.display = 'none';
+        successDiv.style.display = 'none';
+        
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const remember = document.getElementById('remember').checked;
+
+        // Validaciones
+        if (!email || !password) {
+          showError('Por favor completa todos los campos');
+          return;
+        }
+
+        try {
+          // Intentar login con la función de session.js
+          const user = loginUser(email, password, remember);
+          
+          showSuccess('¡Sesión iniciada correctamente!');
+          
+          // Redireccionar al index después de mostrar el mensaje
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1500);
+        } catch (error) {
+          showError(error.message || 'Error al iniciar sesión');
+        }
+      });
+
+      // Cargar email recordado si existe
+      const rememberedEmail = getLocalStorage(STORAGE_KEYS.REMEMBER);
+      if (rememberedEmail) {
+        document.getElementById('email').value = rememberedEmail;
+        document.getElementById('remember').checked = true;
+      }
+
+      // Funciones helper
+      function showError(message) {
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+        successDiv.style.display = 'none';
+      }
+
+      function showSuccess(message) {
+        successDiv.textContent = message;
+        successDiv.style.display = 'block';
+        errorDiv.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

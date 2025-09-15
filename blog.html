@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blog · Level-Up Gamer</title>
+  <meta name="description" content="Novedades, guías y consejos para la comunidad gamer.">
+  
+  <!-- Fuentes + Bootstrap -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  
+  <!-- Estilos locales -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="assets/images/logo-levelup.jpeg" type="image/jpeg">
+
+  <style>
+    :root {
+      --bg: #000;
+      --electric: #1E90FF;
+      --neon: #39FF14;
+      --text: #fff;
+      --muted: #c9d8f3;
+      --card: #0e1218;
+    }
+
+    /* Estilos base */
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Roboto', system-ui;
+    }
+
+    .brand-orbitron {
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    /* Estilos para las tarjetas de blog */
+    .blog-card {
+      background: linear-gradient(180deg, rgba(30,144,255,0.05), rgba(57,255,20,0.02));
+      border: 1px solid rgba(30,144,255,0.2);
+      transition: all 0.3s ease;
+      border-radius: 0.75rem;
+    }
+
+    .blog-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--electric);
+      box-shadow: 0 8px 24px rgba(30,144,255,0.15);
+    }
+
+    .blog-image {
+      height: 200px;
+      object-fit: cover;
+      border-radius: 0.75rem 0.75rem 0 0;
+    }
+
+    .blog-tag {
+      background: rgba(57,255,20,0.1);
+      color: var(--neon);
+      border: 1px solid rgba(57,255,20,0.3);
+      font-size: 0.8rem;
+      padding: 0.2rem 0.8rem;
+      border-radius: 1rem;
+    }
+
+    .blog-date {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .blog-title {
+      color: var(--electric);
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .blog-excerpt {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <header class="sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-primary-subtle" data-bs-theme="dark">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+          <img src="assets/images/logo-levelup.jpeg" alt="Level-Up Gamer" class="brand-logo" height="40">
+          <span class="fw-bold brand-orbitron d-none d-md-inline">Level-Up Gamer</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="catalogo.html">Catálogo</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="blog.html">Blog</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="py-5">
+    <div class="container">
+      <!-- Encabezado -->
+      <div class="text-center mb-5">
+        <h1 class="display-4 brand-orbitron mb-3">Blog Gaming</h1>
+        <p class="lead text-muted">Novedades, guías y consejos para la comunidad gamer</p>
+      </div>
+
+      <!-- Filtros -->
+      <div class="mb-4">
+        <div class="d-flex gap-2 flex-wrap">
+          <button class="btn btn-sm btn-outline-neon active">Todos</button>
+          <button class="btn btn-sm btn-outline-neon">Noticias</button>
+          <button class="btn btn-sm btn-outline-neon">Guías</button>
+          <button class="btn btn-sm btn-outline-neon">Reviews</button>
+          <button class="btn btn-sm btn-outline-neon">Comunidad</button>
+        </div>
+      </div>
+
+      <!-- Grid de entradas -->
+      <div class="row g-4">
+        <!-- Entrada 1 -->
+        <div class="col-md-6 col-lg-4">
+          <article class="blog-card h-100">
+            <img src="assets/images/CG001.png" class="blog-image w-100" alt="Setup Gaming Profesional">
+            <div class="p-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="blog-tag">Guías</span>
+                <span class="blog-date">15 Sept 2025</span>
+              </div>
+              <h2 class="h5 blog-title mb-3">Cómo Armar tu Setup Gaming Profesional</h2>
+              <p class="blog-excerpt mb-3">Descubre los componentes esenciales y consejos expertos para crear tu estación de juego ideal, desde la selección de hardware hasta la ergonomía.</p>
+              <a href="#" class="btn btn-outline-neon btn-sm">Leer más</a>
+            </div>
+          </article>
+        </div>
+
+        <!-- Entrada 2 -->
+        <div class="col-md-6 col-lg-4">
+          <article class="blog-card h-100">
+            <img src="assets/images/JM001.jpeg" class="blog-image w-100" alt="Guía Catan">
+            <div class="p-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="blog-tag">Guías</span>
+                <span class="blog-date">14 Sept 2025</span>
+              </div>
+              <h2 class="h5 blog-title mb-3">Estrategias Avanzadas para Catan</h2>
+              <p class="blog-excerpt mb-3">Domina el arte de la negociación y el desarrollo en Catan con nuestras estrategias probadas. Desde consejos para principiantes hasta tácticas avanzadas.</p>
+              <a href="#" class="btn btn-outline-neon btn-sm">Leer más</a>
+            </div>
+          </article>
+        </div>
+
+        <!-- Entrada 3 -->
+        <div class="col-md-6 col-lg-4">
+          <article class="blog-card h-100">
+            <img src="assets/images/AC002.webp" class="blog-image w-100" alt="Mejores Auriculares Gaming">
+            <div class="p-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="blog-tag">Reviews</span>
+                <span class="blog-date">13 Sept 2025</span>
+              </div>
+              <h2 class="h5 blog-title mb-3">Los Mejores Auriculares Gaming 2025</h2>
+              <p class="blog-excerpt mb-3">Análisis detallado de los auriculares gaming más destacados del año. Comparativas, pruebas de sonido y recomendaciones según tu presupuesto.</p>
+              <a href="#" class="btn btn-outline-neon btn-sm">Leer más</a>
+            </div>
+          </article>
+        </div>
+
+        <!-- Entrada 4 -->
+        <div class="col-md-6 col-lg-4">
+          <article class="blog-card h-100">
+            <img src="assets/images/CO001.webp" class="blog-image w-100" alt="PS5 Pro Rumores">
+            <div class="p-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="blog-tag">Noticias</span>
+                <span class="blog-date">12 Sept 2025</span>
+              </div>
+              <h2 class="h5 blog-title mb-3">Todo sobre la PS5 Pro: Rumores y Especulaciones</h2>
+              <p class="blog-excerpt mb-3">Analizamos los últimos rumores sobre la próxima versión de la PlayStation 5. ¿Qué podemos esperar de la nueva consola de Sony?</p>
+              <a href="#" class="btn btn-outline-neon btn-sm">Leer más</a>
+            </div>
+          </article>
+        </div>
+
+        <!-- Entrada 5 -->
+        <div class="col-md-6 col-lg-4">
+          <article class="blog-card h-100">
+            <img src="assets/images/MS001.webp" class="blog-image w-100" alt="Torneo Gaming">
+            <div class="p-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="blog-tag">Comunidad</span>
+                <span class="blog-date">11 Sept 2025</span>
+              </div>
+              <h2 class="h5 blog-title mb-3">¡Únete a Nuestro Torneo Gaming Mensual!</h2>
+              <p class="blog-excerpt mb-3">Participa en nuestros torneos mensuales de gaming. Grandes premios, diversión asegurada y la oportunidad de conocer a otros gamers.</p>
+              <a href="#" class="btn btn-outline-neon btn-sm">Leer más</a>
+            </div>
+          </article>
+        </div>
+
+        <!-- Entrada 6 -->
+        <div class="col-md-6 col-lg-4">
+          <article class="blog-card h-100">
+            <img src="assets/images/JM002.jpg" class="blog-image w-100" alt="Guía Carcassonne">
+            <div class="p-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="blog-tag">Guías</span>
+                <span class="blog-date">10 Sept 2025</span>
+              </div>
+              <h2 class="h5 blog-title mb-3">Guía Completa de Carcassonne</h2>
+              <p class="blog-excerpt mb-3">Aprende todas las reglas y estrategias para dominar Carcassonne. Desde la colocación de losetas hasta el uso efectivo de los seguidores.</p>
+              <a href="#" class="btn btn-outline-neon btn-sm">Leer más</a>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- Paginación -->
+      <nav class="mt-5">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Anterior</a>
+          </li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">Siguiente</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-5 py-4 border-top border-primary-subtle">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-6">
+          <h5 class="brand-orbitron mb-3">Level-Up Gamer</h5>
+          <p class="text-muted">Tu destino para todo lo relacionado con gaming. Noticias, guías, productos y más.</p>
+        </div>
+        <div class="col-md-3">
+          <h6 class="brand-orbitron mb-3">Enlaces</h6>
+          <ul class="list-unstyled">
+            <li><a href="index.html" class="text-muted text-decoration-none">Inicio</a></li>
+            <li><a href="catalogo.html" class="text-muted text-decoration-none">Catálogo</a></li>
+            <li><a href="blog.html" class="text-muted text-decoration-none">Blog</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h6 class="brand-orbitron mb-3">Síguenos</h6>
+          <div class="d-flex gap-3">
+            <a href="#" class="text-muted"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="text-muted"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" class="text-muted"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="text-muted"><i class="bi bi-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

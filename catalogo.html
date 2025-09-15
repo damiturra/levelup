@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catálogo · Level-Up Gamer</title>
+  <meta name="description" content="Catálogo de productos con filtros, orden y descuento Duoc.">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <!-- Ambos estilos por compatibilidad -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="assets/images/favicon.png">
+  
+  <style>
+    /* Estilos para las tarjetas de productos */
+    .product-card {
+      transition: all 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(30,144,255,.2);
+    }
+
+    /* Estilos para el enlace del título */
+    .product-title-link {
+      color: inherit;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .product-title-link:hover {
+      color: var(--electric);
+    }
+
+    .product-title-link:hover h5 {
+      color: var(--electric);
+    }
+
+    /* Efecto hover para la imagen */
+    .product-card .card-img-top {
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover .card-img-top {
+      transform: scale(1.05);
+    }
+
+    /* Mejorar la visualización de los botones en hover */
+    .product-card .btn {
+      transition: all 0.2s ease;
+    }
+
+    .product-card .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Contenedor de imagen con overflow hidden para el zoom */
+    .product-card .position-relative {
+      overflow: hidden;
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+  </style>
+</head>
+<body>
+  <a class="visually-hidden-focusable skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-primary-subtle shadow-sm" data-bs-theme="dark">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+          <img src="assets/images/logo-levelup.jpeg" alt="Level-Up Gamer" class="brand-logo" height="40">
+          <span class="fw-bold brand-orbitron d-none d-md-inline">Level-Up Gamer</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Mostrar navegación">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <!-- Izquierda -->
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" data-page="index.html" href="index.html">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" data-page="catalogo.html" href="catalogo.html">Catálogo</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-page="blog.html" href="blog.html">Blog</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-page="index.html#eventos" href="index.html#eventos">Eventos/Comunidad</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-page="soporte" href="https://wa.me/56912345678?text=Hola%20Level-Up%20Gamer" target="_blank" rel="noopener">Soporte</a>
+            </li>
+          </ul>
+
+          <!-- Menú móvil - Cuenta -->
+          <ul class="navbar-nav d-lg-none">
+            <li class="nav-item" id="mobileLoginLink">
+              <a class="nav-link" href="login.html">Iniciar sesión</a>
+            </li>
+            <li class="nav-item" id="mobileRegisterLink">
+              <a class="nav-link" href="registro.html">Crear cuenta</a>
+            </li>
+            <li class="nav-item d-none" id="mobileProfileLink">
+              <a class="nav-link" href="perfil.html">Mi perfil</a>
+            </li>
+            <li class="nav-item d-none" id="mobileLogoutItem">
+              <button class="nav-link text-danger border-0 bg-transparent w-100 text-start" id="mobileLogoutBtn">Cerrar sesión</button>
+            </li>
+          </ul>
+
+          <!-- Derecha (escritorio) -->
+          <div class="d-none d-lg-flex align-items-center gap-2">
+            <!-- Carrito -->
+            <a href="carrito.html" class="btn btn-outline-neon position-relative">
+              Carrito
+              <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">0</span>
+            </a>
+
+            <!-- Cuenta -->
+            <div class="dropdown">
+              <button class="btn btn-neon-primary dropdown-toggle" type="button" id="cuentaMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                Cuenta
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end bg-black border-primary-subtle" aria-labelledby="cuentaMenu">
+                <li><a class="dropdown-item text-light" id="navLoginLink" href="login.html">Iniciar sesión</a></li>
+                <li><a class="dropdown-item text-light" id="navRegisterLink" href="registro.html">Crear cuenta</a></li>
+                <li><a class="dropdown-item text-light d-none" id="navProfileLink" href="perfil.html">Mi perfil</a></li>
+                <li><hr class="dropdown-divider border-primary-subtle d-none" id="navDivider"></li>
+                <li><button class="dropdown-item text-light d-none" id="navLogoutBtn" type="button">Salir</button></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Carrito móvil -->
+          <div class="d-lg-none w-100 mt-3">
+            <a href="carrito.html" class="btn btn-outline-neon position-relative w-100">
+              Carrito
+              <span id="cartCountMobile" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">0</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </nav>
+  </header>
+
+  <main id="contenido" class="py-5">
+    <div class="container">
+      <h1 class="h3 brand-orbitron mb-4">Catálogo</h1>
+
+      <!-- Filtros -->
+      <div class="row g-3 align-items-end mb-4">
+        <div class="col-12 col-md-4">
+          <label for="busqueda" class="form-label mb-1">Buscar producto</label>
+          <input id="busqueda" type="search" class="form-control" placeholder="Nombre o código (ej: JM001)">
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label for="filtroCategoria" class="form-label mb-1">Categoría</label>
+          <select id="filtroCategoria" class="form-select">
+            <option value="all">Todas</option>
+            <!-- JS añade el resto -->
+          </select>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label for="precioMax" class="form-label mb-1">
+            Precio máximo: <span id="precioMaxVal">$0</span>
+          </label>
+          <input id="precioMax" type="range" class="form-range" min="0" value="0" step="1000">
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label for="ordenarPor" class="form-label mb-1">Ordenar por</label>
+          <select id="ordenarPor" class="form-select">
+            <option value="relevancia">Relevancia</option>
+            <option value="precio_asc">Precio: menor a mayor</option>
+            <option value="precio_desc">Precio: mayor a menor</option>
+            <option value="nombre_asc">Nombre A–Z</option>
+          </select>
+        </div>
+
+        <div class="col-12 col-md-8 text-md-end">
+          <div id="contadorResultados" class="text-secondary small" aria-live="polite">0 resultados</div>
+        </div>
+      </div>
+
+      <!-- Grid de tarjetas -->
+  <div id="catalogoProductos" class="row g-4">
+        <!-- Tarjetas generadas por JS -->
+      </div>
+    </div>
+  </main>
+
+    <!-- Footer -->
+  <div id="footer-placeholder"></div>
+
+  <script>
+    fetch('assets/includes/footer.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-placeholder').innerHTML = data;
+      });
+  </script>
+
+  <!-- Toast container para notificaciones -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1500">
+    <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto text-primary">Carrito actualizado</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        Producto agregado al carrito exitosamente
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts en orden correcto -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/app.js"></script>
+  <!-- Importante: session.js debe cargarse antes que cualquier script que lo use -->
+  <script src="assets/js/session.js"></script>
+  <script>
+    // Inicialización inmediata del estado de la sesión
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentUser = getCurrentUser();
+      
+      // Elementos del menú desplegable
+      const loginLink = document.getElementById('navLoginLink');
+      const registerLink = document.getElementById('navRegisterLink');
+      const profileLink = document.getElementById('navProfileLink');
+      const divider = document.getElementById('navDivider');
+      const logoutBtn = document.getElementById('navLogoutBtn');
+
+      if (currentUser) {
+        // Usuario logueado
+        loginLink.classList.add('d-none');
+        registerLink.classList.add('d-none');
+        profileLink.classList.remove('d-none');
+        divider.classList.remove('d-none');
+        logoutBtn.classList.remove('d-none');
+
+        // Configurar logout
+        logoutBtn.onclick = function() {
+          if (window.logoutUser) {
+            window.logoutUser();
+            window.location.reload();
+          }
+        };
+      } else {
+        // No hay usuario logueado
+        loginLink.classList.remove('d-none');
+        registerLink.classList.remove('d-none');
+        profileLink.classList.add('d-none');
+        divider.classList.add('d-none');
+        logoutBtn.classList.add('d-none');
+      }
+    });
+  </script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/catalog.js"></script>
+</body>
+</html>

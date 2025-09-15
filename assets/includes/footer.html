@@ -1,0 +1,74 @@
+  <!-- FOOTER -->
+  <footer class="mt-5 border-top border-primary-subtle bg-black py-4">
+    <div class="container">
+      <!-- Social Links -->
+      <div class="d-flex justify-content-center gap-3 mb-4">
+        <a href="https://facebook.com/levelupgamer" target="_blank" rel="noopener" class="text-light fs-4">
+          <i class="bi bi-facebook"></i>
+        </a>
+        <a href="https://twitter.com/levelupgamer" target="_blank" rel="noopener" class="text-light fs-4">
+          <i class="bi bi-twitter"></i>
+        </a>
+        <a href="https://instagram.com/levelupgamer" target="_blank" rel="noopener" class="text-light fs-4">
+          <i class="bi bi-instagram"></i>
+        </a>
+        <a href="https://wa.me/56912345678" target="_blank" rel="noopener" class="text-light fs-4">
+          <i class="bi bi-whatsapp"></i>
+        </a>
+      </div>
+
+      <!-- Share buttons for products -->
+      <div class="text-center mb-4 product-share d-none">
+        <p class="text-muted mb-2">Comparte este producto:</p>
+        <div class="d-flex justify-content-center gap-2">
+          <button class="btn btn-sm btn-outline-light" onclick="shareProduct('facebook')">
+            <i class="bi bi-facebook me-1"></i>Facebook
+          </button>
+          <button class="btn btn-sm btn-outline-light" onclick="shareProduct('twitter')">
+            <i class="bi bi-twitter me-1"></i>Twitter
+          </button>
+          <button class="btn btn-sm btn-outline-light" onclick="shareProduct('whatsapp')">
+            <i class="bi bi-whatsapp me-1"></i>WhatsApp
+          </button>
+        </div>
+      </div>
+      
+      <!-- Credits -->
+      <div class="text-center text-muted">
+        <p class="mb-2">© Level-Up Gamer — Hecho con <span class="text-success">💚</span><span class="text-primary">⚡</span> por Damián Villanueva y Jean Piere Vidal.</p>
+        <p class="small mb-0">Proyecto académico · Forma B · Comunidad gamer en Chile.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Función para compartir productos
+    window.shareProduct = function(platform) {
+      const url = window.location.href;
+      const title = document.title;
+      let shareUrl;
+
+      switch(platform) {
+        case 'facebook':
+          shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+          break;
+        case 'twitter':
+          shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`;
+          break;
+        case 'whatsapp':
+          shareUrl = `https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}`;
+          break;
+      }
+
+      window.open(shareUrl, '_blank', 'width=600,height=400');
+    }
+
+    // Mostrar botones de compartir solo en páginas de productos
+    document.addEventListener('DOMContentLoaded', function() {
+      const isProductPage = window.location.pathname.includes('product.html');
+      const shareButtons = document.querySelector('.product-share');
+      if (isProductPage && shareButtons) {
+        shareButtons.classList.remove('d-none');
+      }
+    });
+  </script>

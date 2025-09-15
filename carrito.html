@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Carrito · Level-Up Gamer</title>
+  <meta name="description" content="Gestiona tu carrito, cantidades y total con descuento DUOC si aplica.">
+  <meta name="theme-color" content="#000000">
+
+  <!-- Fuentes + Bootstrap -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Estilos globales -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="assets/images/logo-levelup.jpeg" type="image/jpeg">
+
+  <style>
+    :root{ --bg:#000; --electric:#1E90FF; --neon:#39FF14; --text:#fff; --muted:#c9d8f3; --card:#0e1218; }
+    html,body{background:var(--bg);color:var(--text);font-family:'Roboto',system-ui}
+    .brand-orbitron{font-family:'Orbitron',sans-serif}
+    .btn-neon-primary{border:1px solid rgba(30,144,255,.6);color:#001;font-weight:600;
+      background:linear-gradient(135deg,var(--electric),var(--neon));
+      box-shadow:0 0 12px rgba(30,144,255,.45),0 0 18px rgba(57,255,20,.3)}
+    .btn-outline-neon{color:#fff;border:1px solid rgba(57,255,20,.6);background:transparent;box-shadow:0 0 10px rgba(57,255,20,.15) inset}
+    .glass{backdrop-filter:blur(8px);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.015));
+      border:1px solid rgba(30,144,255,.25);transition:transform .18s, box-shadow .2s, border-color .2s;border-radius:.75rem}
+    .product-img{width:72px;height:72px;object-fit:cover;border-radius:.5rem;border:1px solid rgba(30,144,255,.35);background:#0f1320}
+    .table-dark thead th{background:#0b0f18;border-color:rgba(30,144,255,.35)}
+    .badge-duoc{background:rgba(57,255,20,.18);border:1px solid rgba(57,255,20,.6)}
+  </style>
+</head>
+<body>
+  <a class="visually-hidden-focusable skip-link" href="#contenido">Saltar al contenido</a>
+
+  <!-- NAV -->
+  <header class="sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-primary-subtle shadow-sm" data-bs-theme="dark">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+          <img src="assets/images/logo-levelup.jpeg" alt="Level-Up Gamer" class="brand-logo" height="40">
+          <span class="fw-bold brand-orbitron d-none d-md-inline">Level-Up Gamer</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Mostrar navegación">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <!-- Izquierda -->
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="catalogo.html">Catálogo</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#eventos">Eventos/Comunidad</a></li>
+          </ul>
+
+          <!-- Derecha -->
+          <div class="d-flex align-items-center gap-2">
+            <a href="carrito.html" class="btn btn-outline-neon position-relative">
+              Carrito <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">0</span>
+            </a>
+            <div class="dropdown">
+              <button class="btn btn-neon-primary dropdown-toggle" type="button" id="cuentaMenu" data-bs-toggle="dropdown" aria-expanded="false">Cuenta</button>
+              <ul class="dropdown-menu dropdown-menu-end bg-black border-primary-subtle" aria-labelledby="cuentaMenu">
+                <!-- estado: NO logeado -->
+                <li><a class="dropdown-item text-light" id="navLoginLink" href="login.html">Iniciar sesión</a></li>
+                <li><a class="dropdown-item text-light" id="navRegisterLink" href="registro.html">Crear cuenta</a></li>
+                <!-- estado: logeado -->
+                <li><a class="dropdown-item text-light d-none" id="navProfileLink" href="perfil.html">Mi perfil</a></li>
+                <li><hr class="dropdown-divider border-primary-subtle d-none" id="navDivider"></li>
+                <li><button class="dropdown-item text-light d-none" id="navLogoutBtn" type="button">Salir</button></li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN -->
+  <main id="contenido" class="py-5">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+        <h1 class="h3 brand-orbitron mb-0">Mi carrito</h1>
+        <span id="msgDescuento" class="badge badge-duoc d-none">DUOC -20% aplicado</span>
+      </div>
+
+      <!-- Carrito vacío -->
+      <div id="carritoVacio" class="alert alert-info d-none" role="alert">
+        Tu carrito está vacío. <a class="alert-link" href="catalogo.html">Ir al catálogo</a>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12 col-lg-8">
+          <div class="table-responsive glass">
+            <table class="table table-dark table-hover align-middle m-0">
+              <thead>
+                <tr>
+                  <th scope="col">Producto</th>
+                  <th scope="col" class="text-center" style="width:130px">Cantidad</th>
+                  <th scope="col" class="text-end" style="width:140px">Precio</th>
+                  <th scope="col" class="text-end" style="width:140px">Subtotal</th>
+                  <th scope="col" class="text-end" style="width:100px">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="carritoTbody">
+                <!-- filas generadas por app.js / initCarrito() -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="d-flex gap-2 mt-3">
+            <button id="btnVaciar" class="btn btn-outline-neon">Vaciar carrito</button>
+            <a href="catalogo.html" class="btn btn-outline-neon">Seguir comprando</a>
+          </div>
+        </div>
+
+        <!-- Resumen -->
+        <div class="col-12 col-lg-4">
+          <div class="card glass">
+            <div class="card-body">
+              <h2 class="h5 brand-orbitron mb-3">Resumen</h2>
+              <div class="d-flex justify-content-between mb-1">
+                <span class="text-secondary">Subtotal</span>
+                <strong id="subtotal">$0</strong>
+              </div>
+              <div class="d-flex justify-content-between mb-1">
+                <span class="text-secondary">Descuento</span>
+                <strong id="descuento">$0</strong>
+              </div>
+              <hr class="border-primary-subtle">
+              <div class="d-flex justify-content-between fs-5">
+                <span>Total</span>
+                <strong id="total">$0</strong>
+              </div>
+              <button id="btnPagar" class="btn btn-neon-primary w-100 mt-3">Pagar</button>
+              <p class="small text-secondary mt-2 mb-0">El descuento DUOC se aplica automáticamente si tu correo termina en <code>@duoc.cl</code>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-5 border-top border-primary-subtle bg-black py-4">
+    <div class="container text-center small text-secondary">
+      © Level-Up Gamer
+    </div>
+  </footer>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/session.js"></script>
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/cart-page.js"></script>
+  <script>
+    document.getElementById('btnPagar').addEventListener('click', function() {
+      const currentUser = window.getCurrentUser?.();
+      if (!currentUser) {
+        alert('Debes iniciar sesión para continuar con la compra');
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      const cart = Cart.get();
+      if (cart.length === 0) {
+        alert('El carrito está vacío');
+        return;
+      }
+      
+      // Aquí iría la lógica de pago
+      window.location.href = 'comprobante.html';
+    });
+  </script>
+</body>
+</html>

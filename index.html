@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inicio · Level-Up Gamer</title>
+  <meta name="description" content="Level-Up Gamer · Tienda gamer en Chile. Catálogo, descuentos Duoc, gamificación, soporte y aporte a la comunidad.">
+  <meta name="theme-color" content="#000000">
+
+  <!-- Fuentes + Bootstrap -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Estilos globales del proyecto -->
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Leaflet (Mapa de eventos) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+
+  <!-- Favicon (logo) -->
+  <link rel="icon" type="image/jpeg" href="assets/images/logo-levelup.jpeg">
+
+  <!-- Estilos locales de Inicio -->
+  <style>
+    :root{
+      --bg:#000; --electric:#1E90FF; --neon:#39FF14; --text:#fff; --muted:#D3D3D3; --card:#0e1218;
+    }
+    html,body{background:var(--bg); color:var(--text); font-family:'Roboto',system-ui}
+    .brand-orbitron{font-family:'Orbitron',sans-serif; letter-spacing:.5px}
+    .navbar{background:#000!important}
+    .navbar .nav-link{color:var(--muted)!important}
+    .navbar .nav-link:hover,.navbar .nav-link.active{color:#fff!important}
+
+    /* tamaños fluidos */
+    h1.display-5{font-size:clamp(2rem,3.5vw,3.2rem)}
+    .lead{font-size:clamp(1rem,1.4vw,1.2rem)}
+
+    /* FX de fondo */
+    .section-fx{position:relative; overflow:hidden; isolation:isolate}
+    .section-fx::before{content:"";position:absolute;inset:-20%;background:
+      radial-gradient(60% 60% at 20% 10%, rgba(30,144,255,.18), transparent 60%),
+      radial-gradient(60% 60% at 85% 15%, rgba(57,255,20,.12), transparent 60%);
+      filter:blur(12px);z-index:-2;animation:floatOrbs 14s ease-in-out infinite alternate}
+    .section-fx::after{content:"";position:absolute;inset:0;background:
+      linear-gradient(transparent 49%, rgba(30,144,255,.12) 50%, transparent 51%) 0 0/100% 40px,
+      linear-gradient(90deg, transparent 49%, rgba(57,255,20,.10) 50%, transparent 51%) 0 0/40px 100%;
+      opacity:.25;mask:linear-gradient(#000, transparent);z-index:-1;animation:gridDrift 18s linear infinite}
+    @keyframes floatOrbs{from{transform:translateY(-6px)}to{transform:translateY(6px)}}
+    @keyframes gridDrift{from{background-position:0 0,0 0}to{background-position:0 40px,40px 0}}
+
+    /* glitch */
+    .glitch{position:relative;display:inline-block;text-transform:uppercase;
+      text-shadow:0 0 12px rgba(30,144,255,.55),0 0 24px rgba(57,255,20,.35)}
+    .glitch::before,.glitch::after{content:attr(data-text);position:absolute;inset:0;mix-blend-mode:screen}
+    .glitch::before{color:#2aa2ff;transform:translate(1px,0);clip-path:inset(0 0 55% 0)}
+    .glitch::after{color:#39FF14;transform:translate(-1px,0);clip-path:inset(45% 0 0 0)}
+    .glitch-anim{animation:glitchJitter 1.8s infinite steps(2,end)}
+    @keyframes glitchJitter{
+      0%,100%{transform:none} 15%{transform:translateY(-1px)} 30%{transform:translateY(1px)}
+      60%{transform:none} 80%{transform:translateY(.5px)}
+    }
+
+    /* botones */
+    .btn-neon-primary{border:1px solid rgba(30,144,255,.6);color:#001;font-weight:600;
+      background:linear-gradient(135deg,var(--electric),var(--neon));
+      box-shadow:0 0 12px rgba(30,144,255,.45),0 0 18px rgba(57,255,20,.3)}
+    .btn-neon-primary:hover{filter:brightness(1.05)}
+    .btn-outline-neon{color:#fff;border:1px solid rgba(57,255,20,.6);background:transparent;
+      box-shadow:0 0 10px rgba(57,255,20,.15) inset}
+    .btn-outline-neon:hover{background:rgba(57,255,20,.08)}
+
+    /* chips, glass, holo */
+    .chip{display:inline-flex;gap:.4rem;padding:.35rem .6rem;border-radius:999px;background:var(--card);
+      border:1px solid rgba(30,144,255,.35);color:#cfe6ff;font-size:.85rem}
+    .neon-divider{height:2px;margin:1.5rem 0;background:
+      linear-gradient(90deg,transparent,rgba(30,144,255,.6),rgba(57,255,20,.6),transparent);
+      box-shadow:0 0 18px rgba(30,144,255,.25),0 0 18px rgba(57,255,20,.25) inset;border:0}
+    .holo-wrap{position:relative;border-radius:1rem;padding:12px;background:
+      linear-gradient(135deg,rgba(30,144,255,.25),rgba(57,255,20,.25)) border-box;
+      border:1px solid rgba(30,144,255,.35);box-shadow:0 10px 24px rgba(0,0,0,.55),0 0 40px rgba(30,144,255,.2)}
+    .holo-wrap::before{content:"";position:absolute;inset:-2px;border-radius:inherit;background:
+      conic-gradient(from 0deg,rgba(30,144,255,.35),rgba(57,255,20,.35),rgba(30,144,255,.35));
+      filter:blur(14px);opacity:.35;z-index:-1;animation:spinGlow 16s linear infinite}
+    @keyframes spinGlow{to{transform:rotate(1turn)}}
+    .glass{backdrop-filter:blur(8px);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.015));
+      border:1px solid rgba(30,144,255,.25);transition:transform .18s, box-shadow .2s, border-color .2s}
+    .glass:hover{transform:translateY(-4px);border-color:rgba(57,255,20,.45);
+      box-shadow:0 12px 28px rgba(0,0,0,.5),0 0 36px rgba(57,255,20,.25)}
+    .text-secondary{color:var(--muted)!important}
+    .img-placeholder{background:#0f1320;width:100%;height:320px;border-radius:.75rem}
+
+    /* carrusel (controles neon) */
+    .neon-control{width:44px;height:44px;border-radius:50%;border:1px solid rgba(30,144,255,.5);
+      background:rgba(15,19,32,.7);box-shadow:0 0 12px rgba(30,144,255,.35), inset 0 0 10px rgba(57,255,20,.12)}
+    .neon-control:hover{border-color:rgba(57,255,20,.75)}
+    .neon-indicators [data-bs-target]{width:8px;height:8px;border-radius:50%;background:rgba(30,144,255,.7)}
+    .neon-indicators .active{background:rgba(57,255,20,.95)}
+
+    /* impacto */
+    .impact-card{background:var(--card);border:1px solid rgba(30,144,255,.3);border-radius:.75rem;padding:1rem}
+    .stat{background:#0a0f17;border:1px solid rgba(30,144,255,.35);border-radius:.75rem;padding:1rem;text-align:center}
+    .stat .num{font:700 1.4rem/1 'Orbitron',sans-serif;color:#cfe6ff;text-shadow:0 0 10px rgba(30,144,255,.4)}
+    .progress-neon{position:relative;height:10px;border-radius:999px;background:#0f1320;border:1px solid rgba(30,144,255,.35);overflow:hidden;box-shadow:inset 0 0 10px rgba(57,255,20,.12)}
+    .progress-neon>span{position:absolute;inset:0 auto 0 0;width:0;background:
+      linear-gradient(90deg,var(--electric),var(--neon));box-shadow:0 0 12px rgba(30,144,255,.45),0 0 18px rgba(57,255,20,.35);border-radius:inherit;transition:width .8s}
+    .badge-impact{background:rgba(57,255,20,.15);border:1px solid rgba(57,255,20,.5);color:#bfffc0}
+
+    /* redes footer */
+    .social-strip{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
+    .social-link{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;
+      background:#0e1218;border:1px solid rgba(30,144,255,.35);color:#cfe6ff;text-decoration:none;
+      box-shadow:inset 0 0 8px rgba(57,255,20,.08);transition:transform .15s, box-shadow .2s, border-color .2s}
+    .social-link:hover{transform:translateY(-2px);border-color:rgba(57,255,20,.6);
+      box-shadow:0 0 12px rgba(30,144,255,.35), inset 0 0 10px rgba(57,255,20,.2);color:#fff}
+    .ico{width:20px;height:20px;display:inline-block}
+
+    /* --- Uniformar tamaños de imágenes --- */
+    .cat-card .card-img-top{ aspect-ratio: 16/9; width:100%; height:auto; object-fit:cover; }
+    #mapChile{ height:380px; border-radius:12px; border:1px solid rgba(30,144,255,.35); box-shadow:0 0 24px rgba(30,144,255,.18); }
+  </style>
+</head>
+<body>
+  <a class="visually-hidden-focusable skip-link" href="#contenido">Saltar al contenido</a>
+
+  <!-- NAV -->
+  <header class="sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-primary-subtle shadow-sm" data-bs-theme="dark">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+          <img id="brandLogo" src="assets/images/logo-levelup.jpeg" alt="Level-Up Gamer" class="brand-logo" height="40">
+          <span class="fw-bold brand-orbitron d-none d-md-inline">Level-Up Gamer</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Mostrar navegación">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <!-- Izquierda -->
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" data-page="index.html" href="index.html">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-page="catalogo.html" href="catalogo.html">Catálogo</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-page="blog.html" href="blog.html">Blog</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-page="index.html#eventos" href="index.html#eventos">Eventos/Comunidad</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-page="soporte" href="https://wa.me/56912345678?text=Hola%20Level-Up%20Gamer" target="_blank" rel="noopener">Soporte</a>
+            </li>
+          </ul>
+
+          <!-- Derecha -->
+          <div class="d-flex align-items-center gap-2">
+            <!-- Carrito -->
+            <a href="carrito.html" class="btn btn-outline-neon position-relative">
+              Carrito
+              <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">0</span>
+            </a>
+
+            <!-- Cuenta -->
+            <div class="dropdown">
+              <button class="btn btn-neon-primary dropdown-toggle" type="button" id="cuentaMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                Cuenta
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end bg-black border-primary-subtle" aria-labelledby="cuentaMenu">
+                <!-- estado: NO logeado -->
+                <li><a class="dropdown-item text-light" id="navLoginLink" href="login.html">Iniciar sesión</a></li>
+                <li><a class="dropdown-item text-light" id="navRegisterLink" href="registro.html">Crear cuenta</a></li>
+
+                <!-- estado: logeado -->
+                <li><a class="dropdown-item text-light d-none" id="navProfileLink" href="perfil.html">Mi perfil</a></li>
+                <li><hr class="dropdown-divider border-primary-subtle d-none" id="navDivider"></li>
+                <li><button class="dropdown-item text-light d-none" id="navLogoutBtn" type="button">Salir</button></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </nav>
+  </header>
+
+  <main id="contenido">
+    <!-- HERO -->
+    <section class="section-fx py-5 border-bottom border-primary-subtle">
+      <div class="container">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-6">
+            <h1 class="display-5 fw-bold mb-2 glitch glitch-anim brand-orbitron" data-text="Level-Up Gamer">Level-Up Gamer</h1>
+            <p class="lead text-secondary mb-4">
+              Consolas, accesorios, PCs y más — curado para la comunidad gamer en Chile.
+              <br class="d-none d-md-inline"> Envíos a todo el país y 20% OFF con correo <code>@duoc.cl</code>.
+            </p>
+            <div class="d-flex flex-wrap gap-3">
+              <a class="btn btn-neon-primary btn-lg" href="catalogo.html">Explorar catálogo</a>
+              <a class="btn btn-outline-neon btn-lg" href="registro.html">Crear cuenta</a>
+            </div>
+            <div class="d-flex flex-wrap gap-2 mt-4">
+              <span class="chip">Envío a todo Chile</span>
+              <span class="chip">20% OFF Duoc</span>
+              <span class="chip">Soporte por WhatsApp</span>
+            </div>
+            <hr class="neon-divider">
+          </div>
+          <div class="col-lg-6 text-center">
+            <div class="holo-wrap rounded-4">
+              <img id="heroImg" src="assets/images/hero-levelup.jpeg" class="img-fluid rounded-4" alt="Portada Level-Up Gamer">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATEGORÍAS (CARRUSEL) -->
+    <section class="py-5">
+      <div class="container">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 class="h3 brand-orbitron mb-0">Categorías destacadas</h2>
+          <div class="d-none d-md-flex align-items-center gap-2">
+            <button class="carousel-control-prev position-static neon-control" type="button" data-bs-target="#catCarousel" data-bs-slide="prev" aria-label="Anterior">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next position-static neon-control" type="button" data-bs-target="#catCarousel" data-bs-slide="next" aria-label="Siguiente">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+
+        <div id="catCarousel" class="carousel slide" data-bs-ride="false">
+          <div class="carousel-indicators neon-indicators d-md-none mb-3">
+            <button type="button" data-bs-target="#catCarousel" data-bs-slide-to="0" class="active" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#catCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          </div>
+
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="row g-4">
+                <div class="col-12 col-md-6 col-lg-4">
+                  <a href="catalogo.html?cat=Accesorios" class="card glass h-100 text-decoration-none cat-card">
+                    <img src="assets/images/AC001.webp" class="card-img-top" alt="Accesorios" onerror="this.classList.add('img-placeholder')">
+                    <div class="card-body"><h3 class="h5 mb-1">Accesorios</h3><p class="text-secondary mb-0">Controles, headsets y más.</p></div>
+                  </a>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                  <a href="catalogo.html?cat=Consolas" class="card glass h-100 text-decoration-none cat-card">
+                    <img src="assets/images/CO001.webp" class="card-img-top" alt="Consolas" onerror="this.classList.add('img-placeholder')">
+                    <div class="card-body"><h3 class="h5 mb-1">Consolas</h3><p class="text-secondary mb-0">Nueva generación y retro.</p></div>
+                  </a>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                  <a href="catalogo.html?cat=Juegos%20de%20Mesa" class="card glass h-100 text-decoration-none cat-card">
+                    <img src="assets/images/JM001.jpeg" class="card-img-top" alt="Juegos de Mesa" onerror="this.classList.add('img-placeholder')">
+                    <div class="card-body"><h3 class="h5 mb-1">Juegos de Mesa</h3><p class="text-secondary mb-0">Clásicos para compartir.</p></div>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="carousel-item">
+              <div class="row g-4">
+                <div class="col-12 col-md-6 col-lg-4">
+                  <a href="catalogo.html?cat=Computadores%20Gamers" class="card glass h-100 text-decoration-none cat-card">
+                    <img src="assets/images/CG001.png" class="card-img-top" alt="Computadores Gamers" onerror="this.classList.add('img-placeholder')">
+                    <div class="card-body"><h3 class="h5 mb-1">Computadores Gamers</h3><p class="text-secondary mb-0">Rendimiento extremo.</p></div>
+                  </a>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                  <a href="catalogo.html?cat=Sillas%20Gamers" class="card glass h-100 text-decoration-none cat-card">
+                    <img src="assets/images/SG001.webp" class="card-img-top" alt="Sillas Gamers" onerror="this.classList.add('img-placeholder')">
+                    <div class="card-body"><h3 class="h5 mb-1">Sillas Gamers</h3><p class="text-secondary mb-0">Ergonomía y comodidad.</p></div>
+                  </a>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                  <a href="catalogo.html?cat=Mouse" class="card glass h-100 text-decoration-none cat-card">
+                    <img src="assets/images/MS001.webp" class="card-img-top" alt="Mouse" onerror="this.classList.add('img-placeholder')">
+                    <div class="card-body"><h3 class="h5 mb-1">Mouse</h3><p class="text-secondary mb-0">Precisión y control.</p></div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex d-md-none justify-content-center gap-2 mt-3">
+            <button class="carousel-control-prev position-static neon-control" type="button" data-bs-target="#catCarousel" data-bs-slide="prev" aria-label="Anterior">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next position-static neon-control" type="button" data-bs-target="#catCarousel" data-bs-slide="next" aria-label="Siguiente">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA PUNTOS -->
+    <section class="py-5 section-fx">
+      <div class="container">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-8">
+            <h2 class="h3 brand-orbitron mb-2">LevelUp Rewards</h2>
+            <p class="text-secondary mb-0">Suma puntos por compras y referidos. Canjéalos por descuentos y sube de nivel: <strong>Bronze → Silver → Gold → Platinum</strong>.</p>
+          </div>
+          <div class="col-lg-4 text-lg-end">
+            <a class="btn btn-neon-primary" href="perfil.html">Ver mis puntos</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- IMPACTO COMUNITARIO -->
+    <section id="impacto-comunidad" class="py-5 border-top border-primary-subtle section-fx">
+      <div class="container">
+        <div class="row align-items-end g-3 mb-3">
+          <div class="col-lg-8">
+            <h2 class="h3 brand-orbitron mb-1">Impacto en la comunidad</h2>
+            <p class="text-secondary mb-0">Cada compra aporta a eventos locales, premios para torneos y clubes estudiantiles.</p>
+          </div>
+          <div class="col-lg-4 text-lg-end">
+            <span class="badge rounded-pill badge-impact">1% de cada compra se destina a la comunidad</span>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-sm-4"><div class="stat"><div class="small text-secondary">Recaudado 2025</div><div class="num" data-count="2500000" data-format="clp">$0</div></div></div>
+          <div class="col-12 col-sm-4"><div class="stat"><div class="small text-secondary">Eventos apoyados</div><div class="num" data-count="12">0</div></div></div>
+          <div class="col-12 col-sm-4"><div class="stat"><div class="small text-secondary">Gamers beneficiados</div><div class="num" data-count="380">0</div></div></div>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <div class="impact-card h-100">
+              <h3 class="mb-2">Compra con propósito</h3>
+              <p class="text-secondary mb-2">Meta del mes: <strong>$500.000</strong> para torneos regionales.</p>
+              <div class="progress-neon mb-2" data-progress="62"><span></span></div>
+              <div class="d-flex justify-content-between small text-secondary"><span>Avance</span><span><strong id="avancePorc">62%</strong> de la meta</span></div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="impact-card h-100">
+              <h3 class="mb-3">Próximos eventos apoyados</h3>
+              <ul class="list-unstyled m-0">
+                <li class="d-flex justify-content-between py-2 border-bottom border-primary-subtle"><div><strong>Chile Game Fest – Viña</strong><div class="small text-secondary">22 Oct</div></div><span class="chip">+100 LevelUp</span></li>
+                <li class="d-flex justify-content-between py-2 border-bottom border-primary-subtle"><div><strong>Torneo Nacional eSports</strong><div class="small text-secondary">15 Nov</div></div><span class="chip">+150 LevelUp</span></li>
+                <li class="d-flex justify-content-between py-2"><div><strong>Convención Retro Gaming</strong><div class="small text-secondary">28 Nov</div></div><span class="chip">+80 LevelUp</span></li>
+              </ul>
+              <div class="text-end mt-3"><a class="btn btn-outline-neon btn-sm" href="catalogo.html">Apoyar comprando</a></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- MAPA DE EVENTOS -->
+    <section id="eventos" class="py-5 section-fx border-top border-primary-subtle">
+      <div class="container">
+        <div class="row g-4 align-items-center">
+          <div class="col-lg-5">
+            <h2 class="h3 brand-orbitron mb-2">Eventos gaming en Chile</h2>
+            <p class="text-secondary">
+              Participa en eventos, torneos y ferias. <strong>Cada asistencia suma puntos LevelUp</strong>
+              que luego puedes canjear por descuentos.
+            </p>
+            <ul class="text-secondary small mb-3">
+              <li><strong>Santiago:</strong> Torneo Nacional de eSports — <span class="text-success">+150 LevelUp</span></li>
+              <li><strong>Viña del Mar:</strong> Chile Game Fest — <span class="text-success">+100 LevelUp</span></li>
+              <li><strong>Concepción:</strong> Convención Retro Gaming — <span class="text-success">+80 LevelUp</span></li>
+            </ul>
+            <a href="catalogo.html" class="btn btn-neon-primary">Apoyar comprando</a>
+          </div>
+          <div class="col-lg-7">
+            <div id="mapChile" aria-label="Mapa de eventos gaming en Chile"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-5 border-top border-primary-subtle bg-black py-4">
+    <div class="container text-center small">
+      <p class="mb-1">© <span class="brand-orbitron">Level-Up Gamer</span> — Hecho con 💚⚡ por <strong>Damián Villanueva</strong> y <strong>Jean Piere Vidal</strong>.</p>
+      <p class="mb-2 text-secondary">Proyecto académico · Forma B · Comunidad gamer en Chile.</p>
+      <div class="d-flex justify-content-center">
+        <div class="social-strip" aria-label="Redes sociales">
+          <a class="social-link" href="https://wa.me/56912345678?text=Hola%20Level-Up%20Gamer" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M20.5 11.9a8.5 8.5 0 1 1-16.5 4.3L3 21l4.9-1a8.5 8.5 0 0 0 12.6-8.1z" stroke="currentColor"/><path d="M8.5 8.8c0 4 3.7 6.7 6 7.2 1 .3 1.8 0 2.1-.8l.3-.8c.1-.3 0-.5-.3-.7l-1.1-.7c-.2-.1-.5-.1-.7.1l-.5.5c-.2.2-.4.2-.6.1-1.1-.6-2-1.4-2.6-2.5-.1-.2 0-.4.1-.6l.4-.5c.2-.2.2-.4.1-.6l-.6-1.2c-.2-.3-.5-.4-.8-.3l-.9.3c-.6.2-1 .9-1 1.4z" fill="currentColor"/></svg>
+          </a>
+          <a class="social-link" href="https://instagram.com/tu_cuenta" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg class="ico" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor"/><circle cx="12" cy="12" r="4" stroke="currentColor"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+          </a>
+          <a class="social-link" href="https://facebook.com/tu_pagina" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v3H8v3h3v6h3v-6h3l1-3h-4V9c0-.6.4-1 1-1z" fill="currentColor"/></svg>
+          </a>
+          <a class="social-link" href="https://twitter.com/tu_cuenta" target="_blank" rel="noopener" aria-label="X (Twitter)">
+            <svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M4 4l7.5 9.2L4.5 20H7l5-5.7L16.7 20H20l-7-9 6.4-7H16l-4.6 5.3L8 4H4z" fill="currentColor"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+
+  <!-- Scripts globales -->
+  <script src="assets/js/session.js"></script>
+  <script src="assets/js/app.js"></script>
+
+  <!-- KPI + Mapa + fallbacks -->
+  <script>
+    // Contadores KPI + progreso
+    document.addEventListener('DOMContentLoaded',()=>{
+      const ease=t=>1-Math.pow(1-t,3),
+            CLP=v=>new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0}).format(v);
+
+      document.querySelectorAll('.stat .num').forEach(el=>{
+        const tgt=+el.dataset.count||0, isCLP=el.dataset.format==='clp', t0=performance.now(), dur=1200;
+        const tick=now=>{
+          const p=Math.min(1,(now-t0)/dur), v=Math.round(tgt*ease(p));
+          el.textContent=isCLP?CLP(v):v;
+          if(p<1)requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+
+      const bar=document.querySelector('.progress-neon');
+      if(bar){
+        const p=Math.max(0,Math.min(100,+bar.dataset.progress||0));
+        bar.querySelector('span').style.width=p+'%';
+        const txt=document.getElementById('avancePorc'); if(txt) txt.textContent=p+'%';
+      }
+    });
+
+    // Fallbacks de imágenes
+    (function(){
+      function tryFallback(img, alts){
+        const test=new Image();
+        test.onload=()=>{ img.src=test.src; };
+        test.onerror=()=>{ alts.length && tryFallback(img, alts.slice(1)); };
+        test.src=alts[0];
+      }
+      const logo=document.getElementById('brandLogo');
+      if(logo){ tryFallback(logo, [logo.src, 'assets/images/logo-levelup.jpg','assets/images/logo-levelup.png']); }
+      const hero=document.getElementById('heroImg');
+      if(hero){ tryFallback(hero, [hero.src, 'assets/images/hero-levelup.jpg','assets/images/hero-levelup.png']); }
+    })();
+
+    // ====== MAPA DE EVENTOS (Leaflet) ======
+    (function(){
+      const map = L.map('mapChile', { scrollWheelZoom:false }).setView([-33.45,-70.66], 5);
+      L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+        { attribution: '&copy; OpenStreetMap & Carto', maxZoom: 19 }
+      ).addTo(map);
+
+      const eventos = [
+        { nombre:'Torneo Nacional eSports', pts:'+150', coords:[-33.4489, -70.6693], ciudad:'Santiago' },
+        { nombre:'Chile Game Fest', pts:'+100', coords:[-33.0245, -71.5518], ciudad:'Viña del Mar' },
+        { nombre:'Convención Retro Gaming', pts:'+80', coords:[-36.8269, -73.0498], ciudad:'Concepción' },
+      ];
+
+      eventos.forEach(e=>{
+        L.marker(e.coords).addTo(map)
+          .bindPopup(`<strong>${e.nombre}</strong><br>${e.ciudad}<br><span style="color:#39FF14">${e.pts} LevelUp</span>`);
+      });
+    })();
+  </script>
+
+  <!-- Sesión en navbar (mostrar/ocultar y logout) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const currentUser = getCurrentUser();
+
+      const show = (sel, on) =>
+        document.querySelectorAll(sel).forEach(el => el.classList.toggle('d-none', !on));
+
+      if (currentUser) {
+        show('#navLoginLink', false);
+        show('#navRegisterLink', false);
+        show('#navProfileLink', true);
+        show('#navDivider', true);
+        show('#navLogoutBtn', true);
+      } else {
+        show('#navLoginLink', true);
+        show('#navRegisterLink', true);
+        show('#navProfileLink', false);
+        show('#navDivider', false);
+        show('#navLogoutBtn', false);
+      }
+
+      document.querySelectorAll('#navLogoutBtn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          logout();
+          location.href = 'index.html';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
