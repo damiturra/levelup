@@ -99,13 +99,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const orderData = {
             id: orderId,
             date: now.toISOString(),
-            user: currentUser,
+            userId: currentUser.id,     // ← NUEVO: llave plana para filtrar fácil en Perfil
+            user: currentUser,          // (mantén esto por compatibilidad)
             items: cart,
-            subtotal: subtotal,
+            subtotal,
             discount: descuento,
-            total: total,
-            isDuoc: isDuoc
-        };
+            total,
+            isDuoc
+            };
+
 
         // Guardar orden en localStorage
         const orders = JSON.parse(localStorage.getItem('levelup_orders') || '[]');
@@ -120,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (userIndex !== -1) {
             users[userIndex].points = (users[userIndex].points || 0) + pointsEarned;
             localStorage.setItem('levelup_users', JSON.stringify(users));
-            localStorage.setItem('levelup_current_user', JSON.stringify(users[userIndex]));
+            localStorage.setItem('levelup_session', JSON.stringify(users[userIndex]));
         }
 
         // Vaciar carrito después de mostrar el comprobante
