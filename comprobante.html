@@ -27,6 +27,31 @@
       box-shadow:0 0 12px rgba(30,144,255,.45),0 0 18px rgba(57,255,20,.3)}
     .badge-duoc{background:rgba(57,255,20,.18);border:1px solid rgba(57,255,20,.6)}
     .table-dark thead th{background:#0b0f18;border-color:rgba(30,144,255,.35)}
+    
+        /* Mejor contraste dentro del comprobante (solo esta tarjeta) */
+    .card.glass .text-secondary {
+      /* Etiquetas "Orden / Fecha / Nombre / Correo / DUOC" */
+      color: #c9d8f3 !important;  /* tu --muted, más claro en fondo oscuro */
+      letter-spacing: .2px;
+    }
+
+    .card.glass strong {
+      /* Valores: ORD-..., fecha, nombre, correo, DUOC */
+      color: #f0f4ff;             /* blanco azulado de alto contraste */
+      font-weight: 700;
+    }
+
+    .card.glass h2 {
+      /* Título "Detalle de la compra" y "Cliente" */
+      color: #7dd3fc;             /* celeste legible sobre oscuro */
+    }
+
+    /* Si quieres un pelín más de legibilidad “gamer” sin perder sobriedad */
+    .card.glass .text-secondary,
+    .card.glass strong {
+      text-shadow: 0 0 6px rgba(30,144,255,.15);
+    }
+  
     @media print {
       .no-print{display:none!important}
       body{background:#fff;color:#000}
